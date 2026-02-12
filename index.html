@@ -200,9 +200,7 @@
             font-family: 'Cinzel', serif;
             font-size: 18px;
             text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 20px;
+            margin-bottom: 10px;
             letter-spacing: 1px;
             color: #fff;
             display: flex;
@@ -384,13 +382,48 @@
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
-        .dev-credit-screen {
-            font-size: 10px;
-            color: #475569;
+        .author-badge {
             text-align: center;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            font-family: 'Courier Prime', monospace;
+            font-size: 9px;
+            font-family: 'Inter', sans-serif;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .author-badge span {
+            display: inline-block;
+            margin-top: 6px;
+            color: var(--accent-gold);
+            font-weight: 700;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 5px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            letter-spacing: 1.5px;
+        }
+
+        .author-badge a.whatsapp-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+            color: var(--success-color);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+            text-transform: none;
+        }
+
+        .author-badge a.whatsapp-link:hover {
+            filter: brightness(1.2);
+            transform: translateY(-2px);
         }
 
         /* --- TOAST NOTIFICATIONS --- */
@@ -918,6 +951,15 @@
                 MedSync <span>Premium</span>
             </h2>
             
+            <div class="author-badge">
+                CRIADO POR <br>
+                <span>RAFAEL ALBUQUERQUE</span>
+                <br>
+                <a href="https://wa.me/5568999991258" target="_blank" class="whatsapp-link">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 14px;"></i> Contato WhatsApp
+                </a>
+            </div>
+            
             <div class="nav-section">
                 <button class="menu-btn active" onclick="switchTab('receita')">
                     <i class="fa-solid fa-prescription-bottle-medical"></i> Receituário
@@ -1000,10 +1042,6 @@
             <button class="print-action" onclick="window.print()">
                 <i class="fa-solid fa-print"></i> IMPRIMIR
             </button>
-
-            <div class="dev-credit-screen">
-                Dev: RAFAEL ALBUQUERQUE
-            </div>
         </div>
 
         <!-- ÁREA PRINCIPAL DA FOLHA -->
