@@ -538,7 +538,7 @@
 
         @media print {
             .sidebar { display: none !important; }
-            #login-screen, #admin-modal, #welcome-banner, #toast-container { display: none !important; }
+            #login-screen, #admin-modal, #welcome-banner, #toast-container, #updates-modal { display: none !important; }
             #app-wrapper { display: flex !important; opacity: 1 !important; background: none !important; }
             .main-content { padding: 0; margin: 0; height: 100%; background: none; display: block; box-shadow: none; }
             .slide-container { width: auto; height: auto; max-width: none; max-height: none; aspect-ratio: auto; display: block; }
@@ -687,6 +687,159 @@
             transform: scale(1.1) rotate(5deg);
             box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
         }
+
+        /* --- ATUALIZAÇÕES MODAL ESTILO --- */
+        #updates-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .updates-card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--accent-cyan);
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(34, 211, 238, 0.15);
+            transform: scale(0.9);
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .updates-header {
+            padding: 25px;
+            background: linear-gradient(180deg, rgba(34, 211, 238, 0.1) 0%, rgba(15, 23, 42, 0) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .updates-header h3 {
+            margin: 0;
+            color: var(--accent-cyan);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .updates-close-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .updates-close-btn:hover { color: white; transform: rotate(90deg); }
+
+        .updates-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .updates-list::-webkit-scrollbar { width: 6px; }
+        .updates-list::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.2); border-radius: 3px; }
+
+        .update-item {
+            display: flex;
+            gap: 20px;
+            position: relative;
+        }
+
+        .update-item::before {
+            content: '';
+            position: absolute;
+            left: 24px; /* Centro do ícone */
+            top: 50px;
+            bottom: -30px;
+            width: 2px;
+            background: rgba(255,255,255,0.05);
+            z-index: 0;
+        }
+        .update-item:last-child::before { display: none; }
+
+        .update-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(15, 23, 42, 1);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+            font-size: 20px;
+            z-index: 1;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+        }
+
+        .update-content {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            flex-grow: 1;
+        }
+
+        .update-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 8px;
+        }
+
+        .update-version {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: #fff;
+            background: var(--gradient-blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 14px;
+        }
+
+        .update-date {
+            font-size: 11px;
+            color: #94a3b8;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .update-desc {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            white-space: pre-line; /* Mantém quebras de linha */
+        }
+
+        .update-author {
+            margin-top: 10px;
+            font-size: 10px;
+            color: #64748b;
+            text-align: right;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -708,41 +861,59 @@
         </div>
     </div>
 
+    <!-- MODAL DE ATUALIZAÇÕES (USUÁRIO) -->
+    <div id="updates-modal">
+        <div class="updates-card">
+            <div class="updates-header">
+                <h3><i class="fa-solid fa-rocket"></i> Novidades & Updates</h3>
+                <button class="updates-close-btn" onclick="document.getElementById('updates-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="updates-list" id="updates-list-content">
+                <!-- Conteúdo carregado via JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- PAINEL ADMIN CENTRALIZADO -->
     <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
-        <div class="admin-card">
+        <div class="admin-card" style="max-width: 900px;"> <!-- Aumentei um pouco para caber 3 colunas ou reorganizar -->
             <h3><i class="fa-solid fa-crown"></i> Painel de Controle Master</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; height: 350px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; height: 400px;">
                 
-                <!-- Coluna Esquerda: Lista com NOVO VISUAL -->
+                <!-- Coluna 1: Usuários -->
                 <div style="display: flex; flex-direction: column; height: 100%;">
                     <h4 style="color: #94a3b8; margin-top: 0; margin-bottom: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-                        <i class="fa-solid fa-users"></i> Usuários Ativos
+                        <i class="fa-solid fa-users"></i> Usuários
                     </h4>
-                    <!-- Container com a nova classe CSS para scroll e layout -->
-                    <div id="admin-users-list" class="admin-list-container">
-                        <!-- Itens inseridos via JS -->
-                    </div>
+                    <div id="admin-users-list" class="admin-list-container" style="height: 100%;"></div>
                 </div>
 
-                <!-- Coluna Direita: Ações -->
-                <div style="display:flex; flex-direction:column; gap:15px; justify-content: flex-start; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 30px;">
+                <!-- Coluna 2: Novo Usuário -->
+                <div style="display:flex; flex-direction:column; gap:15px; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 20px;">
                     <h4 style="color: #94a3b8; margin-top: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
                         <i class="fa-solid fa-user-plus"></i> Novo Acesso
                     </h4>
-                    <input type="text" id="new-user-name" placeholder="Nome do Usuário" style="padding:15px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; font-size: 14px; outline: none;">
-                    <input type="password" id="new-user-pass" placeholder="Senha de Acesso" style="padding:15px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; font-size: 14px; outline: none;">
-                    
-                    <button onclick="window.createUser()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff; border:none; padding:15px; border-radius:10px; cursor:pointer; font-weight:800; text-transform: uppercase; margin-top: 5px; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2); transition: transform 0.2s;">
-                        <i class="fa-solid fa-check"></i> Criar Usuário
-                    </button>
-                    
-                    <div style="flex-grow: 1;"></div>
-                    
-                    <button onclick="window.closeAdmin()" style="background:transparent; color:#94a3b8; border:1px solid rgba(255,255,255,0.1); padding:12px; cursor:pointer; width: 100%; border-radius: 10px; font-weight: 600; font-size: 12px; transition: all 0.2s;">
-                        FECHAR PAINEL
-                    </button>
+                    <input type="text" id="new-user-name" placeholder="Usuário" style="padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; outline: none;">
+                    <input type="password" id="new-user-pass" placeholder="Senha" style="padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; outline: none;">
+                    <button onclick="window.createUser()" style="background: var(--success-color); color:#fff; border:none; padding:12px; border-radius:8px; cursor:pointer; font-weight:800; text-transform: uppercase;"><i class="fa-solid fa-check"></i> Criar</button>
                 </div>
+
+                <!-- Coluna 3: Publicar Atualização (NOVO) -->
+                <div style="display:flex; flex-direction:column; gap:15px; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 20px;">
+                    <h4 style="color: #94a3b8; margin-top: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <i class="fa-solid fa-rocket"></i> Publicar Update
+                    </h4>
+                    <input type="text" id="update-version" placeholder="Versão (ex: v2.5)" style="padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; outline: none;">
+                    <textarea id="update-desc" placeholder="O que há de novo?" style="padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; height: 100px; resize: none; outline: none;"></textarea>
+                    
+                    <button onclick="window.publishUpdate()" style="background: var(--accent-cyan); color:#000; border:none; padding:12px; border-radius:8px; cursor:pointer; font-weight:800; text-transform: uppercase;">
+                        <i class="fa-solid fa-paper-plane"></i> Publicar
+                    </button>
+
+                    <div style="flex-grow: 1;"></div>
+                    <button onclick="window.closeAdmin()" style="background:rgba(255,255,255,0.1); color:#fff; border:none; padding:12px; border-radius:8px; cursor:pointer; font-weight:600;">Fechar</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -758,7 +929,13 @@
                 <button class="menu-btn" onclick="switchTab('comparecimento')"><i class="fa-solid fa-clock"></i> Comparecimento</button>
                 <button class="menu-btn" onclick="switchTab('exames')"><i class="fa-solid fa-microscope"></i> Exames & Raio X</button>
                 <button class="menu-btn" onclick="switchTab('encaminhamento')"><i class="fa-solid fa-user-doctor"></i> Encaminhamento</button>
-                <button class="menu-btn" id="btn-admin-panel" onclick="window.openAdmin()" style="display: none; border: 1px dashed var(--text-gold); color: var(--text-gold);"><i class="fa-solid fa-crown"></i> Painel DEV</button>
+                
+                <!-- BOTÃO NOVIDADES -->
+                <button class="menu-btn" onclick="window.openUpdatesModal()" style="color: var(--accent-cyan); margin-top: 10px;">
+                    <i class="fa-solid fa-bell"></i> Novidades & Updates
+                </button>
+
+                <button class="menu-btn" id="btn-admin-panel" onclick="window.openAdmin()" style="display: none; border: 1px dashed var(--text-gold); color: var(--text-gold); margin-top: 5px;"><i class="fa-solid fa-crown"></i> Painel DEV</button>
                 <button class="menu-btn" onclick="window.doLogout()" style="color: #ef4444; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); border-radius: 0 0 12px 12px; padding-top: 20px;"><i class="fa-solid fa-power-off"></i> Sair do Sistema</button>
             </div>
             
@@ -861,28 +1038,15 @@
                                 </div>
                                 <div class="sc-prescription-area">
                                     <textarea id="cnt-presc" oninput="window.syncVal('cnt-presc', 'cnt-presc-c')"></textarea>
-                                    
-                                    <!-- RODAPÉ DA PRESCRIÇÃO (DATA/HORA/ASSINATURA) - AJUSTADO -->
                                     <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 5px 10px; border-top: 1px dashed rgba(0,0,0,0.2); background: rgba(255,255,255,0.5); margin-top: auto;">
                                         <div style="display: flex; gap: 15px; margin-bottom: 5px;">
-                                            <div style="display: flex; align-items: center; gap: 5px;">
-                                                <span style="font-weight: bold; font-size: 10px;">DATA:</span>
-                                                <input type="text" id="cnt-data" oninput="window.syncVal('cnt-data', 'cnt-data-c')" style="border:none; border-bottom: 1px solid #000; width: 80px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
-                                            </div>
-                                            <div style="display: flex; align-items: center; gap: 5px;">
-                                                <span style="font-weight: bold; font-size: 10px;">HORA:</span>
-                                                <input type="text" id="cnt-hora" oninput="window.syncVal('cnt-hora', 'cnt-hora-c')" style="border:none; border-bottom: 1px solid #000; width: 50px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
-                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-weight: bold; font-size: 10px;">DATA:</span><input type="text" id="cnt-data" oninput="window.syncVal('cnt-data', 'cnt-data-c')" style="border:none; border-bottom: 1px solid #000; width: 80px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;"></div>
+                                            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-weight: bold; font-size: 10px;">HORA:</span><input type="text" id="cnt-hora" oninput="window.syncVal('cnt-hora', 'cnt-hora-c')" style="border:none; border-bottom: 1px solid #000; width: 50px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;"></div>
                                         </div>
-                                        
-                                        <!-- ASSINATURA AJUSTADA (TEXTO ABAIXO DA LINHA) -->
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                                            <div style="border-bottom: 1px solid #000; width: 200px; margin-bottom: 2px;"></div>
-                                            <span style="font-weight: bold; font-size: 8px; letter-spacing: 0.5px;">ASSINATURA DO MÉDICO</span>
-                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;"><div style="border-bottom: 1px solid #000; width: 200px; margin-bottom: 2px;"></div><span style="font-weight: bold; font-size: 8px; letter-spacing: 0.5px;">ASSINATURA DO MÉDICO</span></div>
                                     </div>
                                 </div>
-                                <div class="sc-footer-grid" style="height: 140px;">
+                                <div class="sc-footer-grid" style="height: 140px;"> 
                                     <div class="sc-footer-box">
                                         <div class="sc-box-title">IDENTIFICAÇÃO DO COMPRADOR</div>
                                         <div class="sc-footer-content">
@@ -976,25 +1140,12 @@
                                 </div>
                                 <div class="sc-prescription-area">
                                     <textarea id="cnt-presc-c" readonly></textarea>
-                                    
-                                    <!-- RODAPÉ DA PRESCRIÇÃO (CÓPIA) - AJUSTADO -->
                                     <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 5px 10px; border-top: 1px dashed rgba(0,0,0,0.2); background: rgba(255,255,255,0.5); margin-top: auto;">
                                         <div style="display: flex; gap: 15px; margin-bottom: 5px;">
-                                            <div style="display: flex; align-items: center; gap: 5px;">
-                                                <span style="font-weight: bold; font-size: 10px;">DATA:</span>
-                                                <input type="text" id="cnt-data-c" readonly style="border:none; border-bottom: 1px solid #000; width: 80px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
-                                            </div>
-                                            <div style="display: flex; align-items: center; gap: 5px;">
-                                                <span style="font-weight: bold; font-size: 10px;">HORA:</span>
-                                                <input type="text" id="cnt-hora-c" readonly style="border:none; border-bottom: 1px solid #000; width: 50px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
-                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-weight: bold; font-size: 10px;">DATA:</span><input type="text" id="cnt-data-c" readonly style="border:none; border-bottom: 1px solid #000; width: 80px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;"></div>
+                                            <div style="display: flex; align-items: center; gap: 5px;"><span style="font-weight: bold; font-size: 10px;">HORA:</span><input type="text" id="cnt-hora-c" readonly style="border:none; border-bottom: 1px solid #000; width: 50px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;"></div>
                                         </div>
-                                        
-                                        <!-- ASSINATURA AJUSTADA (CÓPIA) -->
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                                            <div style="border-bottom: 1px solid #000; width: 200px; margin-bottom: 2px;"></div>
-                                            <span style="font-weight: bold; font-size: 8px; letter-spacing: 0.5px;">ASSINATURA DO MÉDICO</span>
-                                        </div>
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;"><div style="border-bottom: 1px solid #000; width: 200px; margin-bottom: 2px;"></div><span style="font-weight: bold; font-size: 8px; letter-spacing: 0.5px;">ASSINATURA DO MÉDICO</span></div>
                                     </div>
                                 </div>
                                 <div class="sc-footer-grid" style="height: 140px;">
@@ -1082,7 +1233,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, getDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         let firebaseConfig;
@@ -1285,6 +1436,74 @@
                 window.showToast("Usuário removido!");
                 loadUsersList();
             } catch(e) { window.showToast("Erro ao remover usuário.", "error"); }
+        };
+
+        /* --- SISTEMA DE UPDATES --- */
+        window.openUpdatesModal = async function() {
+            document.getElementById('updates-modal').style.display = 'flex';
+            const listDiv = document.getElementById('updates-list-content');
+            listDiv.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando atualizações...</div>';
+
+            try {
+                const updatesRef = collection(db, 'artifacts', appId, 'public', 'data', 'medsync_updates');
+                const snapshot = await getDocs(updatesRef);
+                const updates = [];
+                snapshot.forEach(doc => updates.push(doc.data()));
+                
+                // Ordenar por data (decrescente)
+                updates.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                listDiv.innerHTML = '';
+                if(updates.length === 0) {
+                    listDiv.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;">Nenhuma atualização publicada ainda.</div>';
+                    return;
+                }
+
+                updates.forEach(u => {
+                    const date = u.timestamp ? new Date(u.timestamp).toLocaleDateString('pt-BR') : 'Data desconhecida';
+                    listDiv.innerHTML += `
+                        <div class="update-item">
+                            <div class="update-icon"><i class="fa-solid fa-code-commit"></i></div>
+                            <div class="update-content">
+                                <div class="update-meta">
+                                    <span class="update-version">${u.version || 'Update'}</span>
+                                    <span class="update-date">${date}</span>
+                                </div>
+                                <div class="update-desc">${u.description || ''}</div>
+                                <div class="update-author">Publicado por: ${u.author || 'Admin'}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                console.error(e);
+                listDiv.innerHTML = '<div style="text-align:center; padding:20px; color:#ef4444;">Erro ao carregar updates.</div>';
+            }
+        };
+
+        window.publishUpdate = async function() {
+            if(!isDevMaster) { window.showToast("Apenas DEV pode publicar.", "error"); return; }
+            
+            const ver = document.getElementById('update-version').value.trim();
+            const desc = document.getElementById('update-desc').value.trim();
+            
+            if(!ver || !desc) { window.showToast("Preencha versão e descrição.", "error"); return; }
+
+            try {
+                const updatesRef = collection(db, 'artifacts', appId, 'public', 'data', 'medsync_updates');
+                await addDoc(updatesRef, {
+                    version: ver,
+                    description: desc,
+                    author: 'DEV Master',
+                    timestamp: Date.now()
+                });
+                window.showToast("Update publicado com sucesso!");
+                document.getElementById('update-version').value = '';
+                document.getElementById('update-desc').value = '';
+            } catch(e) {
+                console.error(e);
+                window.showToast("Erro ao publicar.", "error");
+            }
         };
 
         window.calcularPediatria = function() {
