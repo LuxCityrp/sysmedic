@@ -3,776 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedSync Premium</title>
+    <title>MedSync Premium | Elite Edition</title>
     <!-- Fontes Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Courier+Prime&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* Identidade MedSync Premium */
-            --primary-dark: #0f172a;    /* Slate 900 - Super escuro e elegante */
-            --primary-blue: #1e293b;    /* Slate 800 */
-            --accent-color: #38bdf8;    /* Azul Tecnológico Premium */
-            --accent-gold: #d4af37;     /* Dourado Premium */
-            --success-color: #10b981;   /* Esmeralda */
-            --bg-body: #f8fafc;         /* Fundo da tela principal */
-            --paper-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), 0 10px 15px -3px rgba(0,0,0,0.1);
-            --sidebar-width: 280px;
+            /* --- PALETA DE CORES ELITE --- */
+            --bg-deep: #020617;          /* Fundo ultra escuro */
+            --glass-panel: rgba(15, 23, 42, 0.65); /* Vidro escuro */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            
+            /* Gradientes e Acentos */
+            --gradient-gold: linear-gradient(135deg, #fcd34d 0%, #d97706 100%); /* Dourado rico */
+            --text-gold: #fbbf24;
+            
+            --gradient-blue: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%); /* Azul Tech */
+            --accent-cyan: #22d3ee;
+            
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            
+            /* UI Elements */
+            --sidebar-width: 300px;
             --input-line: #cbd5e1;
+            --paper-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 15px rgba(0,0,0,0.2);
+            --glow-blue: 0 0 20px rgba(56, 189, 248, 0.3);
+            --glow-gold: 0 0 20px rgba(251, 191, 36, 0.2);
         }
 
         * { box-sizing: border-box; }
 
         body {
-            background-color: var(--primary-dark); /* Fundo inicial escuro para o login */
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(217, 119, 6, 0.05) 0%, transparent 40%);
             margin: 0;
             font-family: 'Inter', sans-serif;
             overflow: hidden;
-            color: #333;
+            color: #e2e8f0;
         }
 
-        /* --- TELA DE LOGIN PREMIUM --- */
+        /* --- LOGOMARCA EXCLUSIVA --- */
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: var(--glow-blue);
+            transform: rotate(-5deg);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .brand-sub {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: var(--text-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: -2px;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- TELA DE LOGIN --- */
         #login-screen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+            background: #020617;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.6s ease;
         }
 
-        /* Efeito de luz ao fundo */
-        .login-glow {
+        .login-bg-effect {
             position: absolute;
-            width: 40vw; height: 40vw;
-            background: radial-gradient(circle, rgba(56,189,248,0.15) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05), transparent 70%);
             z-index: 0;
-            animation: pulse 6s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.1); opacity: 1; }
         }
 
         .login-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 50px 40px;
-            border-radius: 20px;
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 60px 40px;
+            border-radius: 24px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
             z-index: 1;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 30px;
             transform: translateY(0);
-            animation: floatUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-        }
-
-        @keyframes floatUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .login-logo {
-            text-align: center;
-            color: #fff;
-            font-size: 28px;
-            font-weight: 700;
-            font-family: 'Cinzel', serif;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        .login-logo i {
-            color: var(--accent-color);
-            font-size: 32px;
-            margin-right: 8px;
-            filter: drop-shadow(0 0 10px rgba(56,189,248,0.5));
-        }
-
-        .login-logo span {
-            color: var(--accent-gold);
-            font-style: italic;
-            font-family: 'Playfair Display', serif;
-            font-weight: 400;
-        }
-
-        .login-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .login-input-group {
-            position: relative;
-        }
-
-        .login-input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-
-        #login-screen .login-input-group input[type="text"],
-        #login-screen .login-input-group input[type="password"] {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s;
-        }
-
-        #login-screen .login-input-group input[type="text"]:focus,
-        #login-screen .login-input-group input[type="password"]:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(56,189,248,0.2);
-            background: rgba(15, 23, 42, 0.8);
-        }
-
-        .login-btn {
-            background: linear-gradient(135deg, var(--accent-gold) 0%, #b8962e 100%);
-            color: #fff;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 25px rgba(212, 175, 55, 0.4);
-            filter: brightness(1.1);
-        }
-
-        /* --- APP WRAPPER --- */
-        #app-wrapper {
-            display: none; /* Oculto até logar */
-            width: 100vw;
-            height: 100vh;
-            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        /* --- 1. MENU LATERAL --- */
-        .sidebar {
-            width: var(--sidebar-width);
-            background-color: var(--primary-dark);
-            color: #ecf0f1;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.15);
-            z-index: 100;
-            height: 100vh;
-            overflow-y: auto; 
-            border-right: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .sidebar::-webkit-scrollbar { width: 6px; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-
-        .sidebar h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .sidebar h2 span {
-            color: var(--accent-gold);
-            font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            font-style: italic;
-            letter-spacing: 2px;
-        }
-
-        .sidebar h2 i {
-            color: var(--accent-color);
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        /* Seção de Navegação */
-        .nav-section {
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 15px;
-        }
-
-        .menu-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 14px 18px;
-            text-align: left;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            width: 100%;
+            animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             position: relative;
             overflow: hidden;
         }
 
-        .menu-btn i { width: 20px; text-align: center; transition: 0.3s; }
-
-        .menu-btn:hover {
-            background-color: rgba(255,255,255,0.05);
-            color: #fff;
-            padding-left: 22px;
+        .login-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--gradient-gold);
         }
 
-        .menu-btn.active {
-            background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0) 100%);
-            color: var(--accent-color);
-            border-left: 3px solid var(--accent-color);
-            border-radius: 0 8px 8px 0;
-            font-weight: 600;
-        }
-        
-        .menu-btn.active i { color: var(--accent-color); }
+        .login-inputs { display: flex; flex-direction: column; gap: 20px; }
+        .login-input-group { position: relative; }
+        .login-input-group i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--accent-cyan); font-size: 18px; transition: 0.3s; }
 
-        /* Botão DEV Especial */
-        #btn-admin-panel {
-            display: none; /* Só aparece pro DEV */
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--accent-gold);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            margin-top: 10px;
-        }
-        #btn-admin-panel:hover {
-            background: rgba(212, 175, 55, 0.2);
-            color: #fff;
-        }
-
-        /* Seção Calculadora */
-        .calc-section {
-            background: rgba(15, 23, 42, 0.5);
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 25px;
+        #login-screen input {
+            width: 100%; padding: 18px 18px 18px 50px;
+            background: rgba(2, 6, 23, 0.6);
             border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px; color: #fff; font-size: 15px; font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
         }
-        .calc-label { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; display: block; letter-spacing: 0.5px; }
+        #login-screen input:focus { outline: none; border-color: var(--accent-cyan); background: rgba(2, 6, 23, 0.8); box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.1); }
+        #login-screen input:focus + i { color: #fff; }
+
+        .login-btn {
+            background: var(--gradient-gold); color: #0f172a; border: none; padding: 18px;
+            border-radius: 12px; font-size: 14px; font-weight: 800; letter-spacing: 1px;
+            cursor: pointer; text-transform: uppercase; box-shadow: var(--glow-gold);
+            transition: all 0.3s; margin-top: 10px; font-family: 'Montserrat', sans-serif;
+        }
+        .login-btn:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3); }
+
+        #app-wrapper { display: none; width: 100vw; height: 100vh; opacity: 0; transition: opacity 0.5s ease; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width); background: var(--glass-panel);
+            backdrop-filter: blur(15px); border-right: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; padding: 30px 20px;
+            z-index: 100; height: 100vh; overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+        .menu-btn {
+            background: transparent; border: none; color: #94a3b8; padding: 16px 20px;
+            text-align: left; font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; border-radius: 12px; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 15px; width: 100%; font-family: 'Inter', sans-serif;
+        }
+        .menu-btn i { width: 24px; text-align: center; font-size: 16px; transition: 0.3s; color: #64748b; }
+        .menu-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
+        .menu-btn:hover i { color: #fff; transform: scale(1.1); }
+        .menu-btn.active { background: rgba(56, 189, 248, 0.1); color: var(--accent-cyan); box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2); }
+        .menu-btn.active i { color: var(--accent-cyan); filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5)); }
+
+        .calc-section {
+            background: rgba(2, 6, 23, 0.4); padding: 20px; border-radius: 16px;
+            margin-bottom: 25px; border: 1px solid var(--glass-border);
+        }
+        .calc-label { font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 8px; display: block; text-transform: uppercase; }
         .calc-input { 
-            width: 100%; padding: 8px 10px; border-radius: 6px; 
-            border: 1px solid #334155; background: #1e293b; color: #fff; 
-            margin-bottom: 12px; font-family: 'Inter', sans-serif;
-            transition: border 0.3s;
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(15, 23, 42, 0.8); color: #fff; margin-bottom: 15px; font-size: 13px; transition: 0.3s;
         }
-        .calc-input:focus { border-color: var(--accent-color); outline: none; }
+        .calc-input:focus { border-color: var(--accent-cyan); outline: none; background: #0f172a; }
         
         .calc-result { 
-            background: rgba(212, 175, 55, 0.1); 
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold); 
-            padding: 12px; 
-            border-radius: 6px; 
-            font-size: 12px; 
-            font-weight: 500; 
-            text-align: center; 
-            margin-top: 5px; 
-            display: none; 
-            line-height: 1.5; 
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.3); color: var(--text-gold); padding: 15px;
+            border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center;
+            margin-top: 10px; display: none; line-height: 1.6;
         }
-
-        /* Seção de Modelos */
-        .templates-section {
-            background-color: rgba(15, 23, 42, 0.5);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .templates-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 10px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .template-select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            border: 1px solid #334155;
-            background-color: #1e293b;
-            color: #ecf0f1;
-            font-size: 12px;
-        }
-
-        .template-actions { display: flex; gap: 8px; }
 
         .btn-small {
-            flex: 1; padding: 8px; font-size: 11px; border: none;
-            border-radius: 6px; cursor: pointer; color: white;
-            transition: all 0.2s; font-weight: 600; text-transform: uppercase;
+            flex: 1; padding: 10px; font-size: 10px; border: none; border-radius: 8px;
+            cursor: pointer; color: white; transition: all 0.2s; font-weight: 700; text-transform: uppercase;
         }
-        .btn-small:hover { transform: translateY(-1px); filter: brightness(110%); }
-        .btn-save { background-color: var(--accent-color); color: #0f172a;}
-        .btn-del { background-color: transparent; border: 1px solid #ef4444; color: #ef4444; }
-        .btn-del:hover { background-color: rgba(239, 68, 68, 0.1); }
-        .btn-file { background-color: #475569; margin-top: 8px; width: 100%; }
+        .btn-save { background: var(--accent-cyan); color: #020617; }
+        .btn-del { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; }
+        .btn-file { background: #334155; margin-top: 8px; width: 100%; border: 1px solid rgba(255,255,255,0.1); }
 
         .print-action {
-            margin-top: auto;
-            background-color: var(--success-color);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            transition: all 0.2s;
-            margin-bottom: 10px;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .print-action:hover {
-            transform: translateY(-2px);
-            background-color: #059669;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            margin-top: auto; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800;
+            font-size: 14px; cursor: pointer; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%;
+            text-transform: uppercase; font-family: 'Montserrat', sans-serif;
         }
 
         .author-badge {
-            text-align: center;
-            font-size: 9px;
-            font-family: 'Inter', sans-serif;
-            color: #94a3b8;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-align: center; font-size: 9px; color: #64748b; margin-bottom: 30px;
+            padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); text-transform: uppercase;
         }
-
         .author-badge span {
-            display: inline-block;
-            margin-top: 6px;
-            color: var(--accent-gold);
-            font-weight: 700;
-            background: rgba(212, 175, 55, 0.1);
-            padding: 5px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            letter-spacing: 1.5px;
+            display: inline-block; margin-top: 8px; background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            color: var(--text-gold); font-weight: 700; padding: 6px 15px; border-radius: 20px; border: 1px solid rgba(251, 191, 36, 0.2);
         }
 
-        .author-badge a.whatsapp-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            color: var(--success-color);
-            text-decoration: none;
-            font-size: 10px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            letter-spacing: 0.5px;
-            text-transform: none;
-        }
-
-        .author-badge a.whatsapp-link:hover {
-            filter: brightness(1.2);
-            transform: translateY(-2px);
-        }
-
-        /* --- TOAST NOTIFICATIONS --- */
-        #toast-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: #fff;
-            color: #334155;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            border-left: 5px solid #333;
-            opacity: 0;
-            transform: translateX(100%);
-            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-            font-family: 'Inter', sans-serif;
-            min-width: 250px;
-        }
-
-        .toast.success { border-left-color: var(--success-color); }
-        .toast.error { border-left-color: #ef4444; }
-        .toast.info { border-left-color: var(--accent-color); }
-
-        .toast i { font-size: 18px; }
-        .toast.success i { color: var(--success-color); }
-        .toast.error i { color: #ef4444; }
-        .toast.info i { color: var(--accent-color); }
-
-        @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
-        @keyframes fadeOut { to { opacity: 0; transform: translateX(100%); } }
-
-        /* --- BEM-VINDO BANNER --- */
-        #welcome-banner {
-            position: fixed;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--accent-gold);
-            padding: 20px 40px;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(212, 175, 55, 0.15);
-            z-index: 9998;
-            color: #fff;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 350px;
-            animation: welcomeSlideDown 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-        }
-        #welcome-banner h3 {
-            margin: 0;
-            font-family: 'Cinzel', serif;
-            color: var(--accent-gold);
-            font-size: 22px;
-            letter-spacing: 1px;
-        }
-        #welcome-banner p {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 400;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-        }
-        @keyframes welcomeSlideDown {
-            from { opacity: 0; top: -50px; }
-            to { opacity: 1; top: 40px; }
-        }
-        @keyframes welcomeFadeOut {
-            from { opacity: 1; top: 40px; }
-            to { opacity: 0; top: -50px; }
-        }
-
-        /* --- MODAL ADMIN (GERENCIAR ACESSOS) --- */
-        #admin-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .admin-card {
-            background: var(--primary-dark);
-            border: 1px solid var(--accent-gold);
-            padding: 30px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            color: #fff;
-        }
-
-        .admin-card h3 {
-            margin: 0 0 20px 0;
-            color: var(--accent-gold);
-            font-family: 'Cinzel', serif;
-            text-align: center;
-        }
-
-        .admin-list {
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 10px;
-            max-height: 150px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            border: 1px solid #334155;
-        }
-
-        .admin-list-item {
-            display: flex; justify-content: space-between;
-            padding: 8px; border-bottom: 1px solid #334155;
-            font-size: 13px;
-        }
-        .admin-list-item:last-child { border-bottom: none; }
-        .admin-list-item button {
-            background: transparent; border: none; color: #ef4444; cursor: pointer;
-        }
-
-        /* --- 2. ÁREA PRINCIPAL --- */
+        /* --- MAIN CONTENT --- */
         .main-content {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
-            height: 100vh;
+            flex-grow: 1; display: flex; justify-content: center; align-items: center;
+            padding: 40px; height: 100vh; box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
         }
-
         .slide-container {
-            width: 95%;
-            max-width: 1400px;
-            aspect-ratio: 297/210; /* Padrão Landscape */
-            max-height: 95vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            width: 95%; max-width: 1400px; aspect-ratio: 297/210; max-height: 95vh;
+            display: flex; justify-content: center; align-items: center; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
+        .slide-container.portrait-mode { aspect-ratio: 210/297; max-width: 780px; }
 
-        .slide-container.portrait-mode {
-            aspect-ratio: 210/297;
-            max-width: 780px; 
-        }
-
-        /* --- 3. A FOLHA A4 --- */
         .a4-sheet {
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            display: flex;
-            padding: 8mm 15mm;
-            box-shadow: var(--paper-shadow);
-            position: relative;
-            transition: all 0.4s ease;
-            border-radius: 2px;
+            width: 100%; height: 100%; background: #fff; display: flex; padding: 8mm 15mm;
+            box-shadow: var(--paper-shadow); position: relative; transition: all 0.4s ease;
+            border-radius: 2px; color: #333;
         }
 
         .prescription-half {
-            width: 50%;
-            height: 100%;
-            padding: 0 2%;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px dashed #bdc3c7;
-            position: relative;
-            transition: width 0.3s;
+            width: 50%; height: 100%; padding: 0 2%; display: flex; flex-direction: column;
+            border-right: 1px dashed #bdc3c7; position: relative;
         }
+        .prescription-half:last-child { border-right: none; padding-left: 2%; padding-right: 0; }
+        .a4-sheet.sheet-portrait .prescription-half { width: 100%; border-right: none; padding: 0 10mm; }
+        .a4-sheet.sheet-portrait .prescription-half.readonly-side { display: none; }
 
-        .prescription-half:last-child {
-            border-right: none;
-            padding-left: 2%;
-            padding-right: 0;
-        }
+        .header { text-align: center; margin-bottom: 5px; border-bottom: 3px double #2c3e50; padding-bottom: 5px; display: flex; flex-direction: column; align-items: center; }
+        .header-content { display: flex; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .logo-img { height: 65px; width: auto; object-fit: contain; }
+        .header-titles h1 { font-size: 13px; margin: 0; font-weight: 800; font-family: 'Playfair Display', serif; color: #2c3e50; }
+        .header-titles h2 { font-size: 9px; margin: 2px 0; font-weight: 600; color: #555; font-family: 'Inter', sans-serif; text-transform: uppercase; }
+        .doc-label { background-color: #2c3e50; color: white; font-size: 12px; padding: 4px 20px; border-radius: 20px; display: inline-block; margin-top: 2px; font-weight: 700; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1.2px; }
+        .footer { margin-top: auto; text-align: center; font-size: 9px; color: #7f8c8d; border-top: 2px solid #2c3e50; padding-top: 8px; line-height: 1.4; }
 
-        .a4-sheet.sheet-portrait .prescription-half {
-            width: 100%;
-            border-right: none;
-            padding: 0 10mm;
-        }
+        .body-content { flex-grow: 1; display: flex; flex-direction: column; gap: 5px; padding-top: 10px; font-size: 12px; }
+        .field-group { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 4px; }
+        .label { font-weight: 700; font-size: 11px; text-transform: uppercase; color: #2c3e50; font-family: 'Inter', sans-serif; white-space: nowrap; }
         
-        .a4-sheet.sheet-portrait .prescription-half.readonly-side {
-            display: none;
-        }
-
-        /* --- 4. CONTEÚDO DA RECEITA --- */
-        .header {
-            text-align: center;
-            margin-bottom: 5px;
-            border-bottom: 3px double #2c3e50;
-            padding-bottom: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .header-content {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .logo-area {
-            width: 65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .titles-area {
-            flex: 1;
-            text-align: center;
-            padding: 0 5px;
-            overflow: hidden;
-        }
-
-        .logo-img {
-            height: 65px;
-            width: auto;
-            object-fit: contain;
-            display: block;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-        }
-        
-        .logo-placeholder {
-            height: 65px;
-            width: 65px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #95a5a6;
-            font-size: 32px;
-            border: 2px dashed #ecf0f1;
-            border-radius: 50%;
-        }
-
-        .header-titles h1 { 
-            font-size: 13px; 
-            margin: 0; 
-            font-weight: 800; 
-            font-family: 'Playfair Display', serif; 
-            white-space: nowrap; 
-            color: #2c3e50;
-            letter-spacing: 0.5px;
-        }
-        .header-titles h2 { 
-            font-size: 9px; 
-            margin: 2px 0; 
-            font-weight: 600; 
-            color: #555; 
-            white-space: nowrap;
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-        }
-        
-        .doc-label {
-            background-color: #2c3e50;
-            color: white;
-            font-size: 12px;
-            padding: 4px 20px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 2px;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .footer {
-            margin-top: auto;
-            text-align: center;
-            font-size: 9px;
-            color: #7f8c8d;
-            border-top: 2px solid #2c3e50;
-            padding-top: 8px;
-            line-height: 1.4;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .body-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding-top: 10px;
-            font-size: 12px;
-            overflow: hidden; 
-        }
-
-        .field-group {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .label {
-            font-weight: 700;
-            font-size: 11px;
-            white-space: nowrap;
-            text-transform: uppercase;
-            color: #2c3e50;
-            font-family: 'Inter', sans-serif;
-        }
-
         input[type="text"], textarea {
-            border: none;
-            border-bottom: 1px solid var(--input-line);
-            background: transparent;
-            font-family: 'Courier Prime', monospace;
-            font-size: 14px;
-            color: #000;
-            padding: 2px 5px;
-            width: 100%;
-            outline: none;
-            transition: border-bottom-color 0.2s;
+            border: none; border-bottom: 1px solid #cbd5e1; background: transparent;
+            font-family: 'Courier Prime', monospace; font-size: 14px; color: #000;
+            padding: 2px 5px; width: 100%; outline: none; transition: 0.2s;
         }
-        input[type="text"]:focus, textarea:focus {
-            border-bottom: 1px solid var(--accent-color);
-            background-color: rgba(56, 189, 248, 0.03);
-        }
+        input[type="text"]:focus, textarea:focus { border-bottom: 1px solid #38bdf8; background-color: rgba(56, 189, 248, 0.05); }
 
         .tab-content { display: none; flex-grow: 1; flex-direction: column; height: 100%; }
         .tab-content.active { display: flex; animation: fadeIn 0.3s ease; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         .med-row-1 { display: grid; grid-template-columns: 25px 1fr 70px; gap: 8px; align-items: center; }
@@ -780,121 +285,407 @@
         .med-number { font-weight: 900; font-size: 14px; font-family: 'Playfair Display', serif; color: #2c3e50; }
         .med-block { border-bottom: 1px dotted #e0e0e0; padding-bottom: 6px; margin-bottom: 6px; }
 
-        .atestado-body {
-            font-family: 'Courier Prime', monospace;
-            font-size: 15px;
-            line-height: 2.4;
-            text-align: justify;
-            padding: 20px 0;
-            color: #1a1a1a;
-        }
-        .atestado-input { display: inline-block; text-align: center; font-weight: bold; }
-
-        .encaminhamento-section { margin-bottom: 15px; }
-        .encaminhamento-title { 
-            font-weight: 800; border-bottom: 2px solid #2c3e50; 
-            display: inline-block; margin-bottom: 8px; font-size: 11px; 
-            color: #2c3e50; font-family: 'Inter', sans-serif;
-        }
-
-        /* EXAMES */
-        .exams-layout {
-            display: flex; flex-grow: 1; gap: 10px; overflow: hidden;
-            border-top: 1px solid #ddd; padding-top: 5px; flex-direction: column; 
-        }
-
-        .exam-header {
-            font-size: 10px; font-weight: 700; background: #334155; 
-            color: white; text-align: center; padding: 4px; margin-bottom: 8px;
-            text-transform: uppercase; border-radius: 2px; letter-spacing: 0.5px;
-        }
-
-        .sub-header {
-            font-size: 9px; font-weight: bold; margin-bottom: 5px;
-            border-bottom: 1px solid #ccc; text-align: left; color: #555;
-        }
-
-        .compact-grid {
-            display: grid; gap: 2px 8px; overflow-y: auto; flex-grow: 1; align-content: start;
-        }
-        .compact-grid.two-cols { grid-template-columns: 1fr 1fr; }
-        .compact-grid.three-cols { grid-template-columns: 1fr 1fr 1fr; }
-
-        .exam-item-compact {
-            font-family: 'Inter', sans-serif; font-size: 9px; display: flex;
-            align-items: center; gap: 4px; line-height: 1.3; white-space: nowrap;
-            overflow: hidden; text-overflow: ellipsis; color: #333;
-        }
-
-        .exam-item-compact:hover { background-color: #f0f3f4; border-radius: 2px; }
-
-        .exam-item-compact input[type="checkbox"] {
-            transform: scale(0.9); margin: 0; accent-color: #2c3e50; flex-shrink: 0; cursor: pointer;
-        }
-
-        .side-check {
-            display: flex; justify-content: center; gap: 30px; margin-top: 8px;
-            font-size: 10px; font-weight: bold; width: 100%; background: #f8f9fa;
-            padding: 5px; border-radius: 4px;
-        }
-
-        /* CONTROLE ESPECIAL */
-        .special-control-container {
-            display: flex; flex-direction: column; height: 100%; font-family: 'Arial', sans-serif;
-            border: 1px solid #aaa; padding: 5px; width: 100%; box-sizing: border-box; overflow: hidden;
-        }
+        /* Styles Controle Especial */
+        .special-control-container { display: flex; flex-direction: column; height: 100%; font-family: 'Arial', sans-serif; border: 1px solid #aaa; padding: 5px; width: 100%; box-sizing: border-box; overflow: hidden; }
         .sc-header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #000; }
         .sc-sub-header { text-align: center; font-size: 12px; margin-bottom: 5px; color: #333; }
         .sc-box { border: 1px solid #555; padding: 5px; margin-bottom: 5px; }
-        .sc-box-title { background: #eee; text-align: center; font-weight: bold; font-size: 11px; border-bottom: 1px solid #555; padding: 2px 0; text-transform: uppercase; }
+        .sc-box-title { background: #eee; text-align: center; font-weight: 800; font-size: 9px; border-bottom: 1px solid #555; padding: 2px 0; text-transform: uppercase; color: #000; letter-spacing: 0.5px; }
         .sc-emitente-info { font-size: 10px; text-align: center; line-height: 1.2; padding-top: 3px; }
         .sc-field-line { display: flex; align-items: baseline; gap: 5px; margin-bottom: 3px; font-size: 12px; }
-        .sc-field-line input { font-family: 'Courier Prime', monospace; font-size: 13px; border-bottom: 1px solid #888; }
+        
         .sc-prescription-area {
             flex-grow: 1; border: 1px solid #555; margin-bottom: 5px;
             background-image: linear-gradient(transparent, transparent 29px, #ccc 30px);
-            background-size: 100% 30px; line-height: 30px; padding: 0 5px;
+            background-size: 100% 30px; line-height: 30px; padding: 0;
+            display: flex; flex-direction: column;
         }
-        .sc-prescription-area textarea { width: 100%; height: 100%; background: transparent; border: none; resize: none; line-height: 30px; font-size: 14px; font-family: 'Courier Prime', monospace; outline: none; margin-top: 1px; }
-        .sc-footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; height: 170px; }
-        .sc-footer-box { border: 1px solid #555; display: flex; flex-direction: column; }
-        .sc-footer-content { padding: 4px 5px; font-size: 10px; display: flex; flex-direction: column; justify-content: space-evenly; flex-grow: 1; }
-        .sc-input-sm { border: none; border-bottom: 1px solid #888; width: 100%; font-family: 'Courier Prime', monospace; font-size: 10px; padding: 0 2px; background: transparent; height: 16px; }
+        .sc-prescription-area textarea {
+            width: 100%; flex-grow: 1; background: transparent; border: none; resize: none;
+            line-height: 30px; font-size: 14px; font-family: 'Courier Prime', monospace;
+            outline: none; margin-top: 1px; padding: 0 5px;
+        }
 
-        /* IMPRESSÃO */
+        .sc-footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; height: 140px; }
+        .sc-footer-box { border: 1px solid #555; display: flex; flex-direction: column; }
+        .sc-footer-content {
+            padding: 4px 5px; font-size: 9px; display: flex; flex-direction: column;
+            justify-content: space-between; flex-grow: 1; font-family: 'Arial', sans-serif; color: #000; height: 100%;
+        }
+        .sc-input-sm { border: none; border-bottom: 1px solid #888; width: 100%; font-family: 'Courier Prime', monospace; font-size: 10px; padding: 0 2px; background: transparent; height: 14px; }
+
+        /* Admin Modal */
+        .admin-card {
+            background: rgba(15, 23, 42, 0.95); border: 1px solid var(--text-gold);
+            padding: 40px; border-radius: 20px; width: 90%; max-width: 800px;
+            box-shadow: 0 0 100px rgba(0,0,0,0.8); color: #fff;
+            transform: scale(0.9); animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes modalPop { to { transform: scale(1); opacity: 1; } }
+        .admin-card h3 { color: var(--text-gold); font-family: 'Montserrat', sans-serif; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;}
+
+        /* Toast */
+        #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(5px); color: #fff; padding: 12px 20px; border-radius: 8px; border-left: 4px solid #333; min-width: 250px; animation: slideIn 0.4s ease forwards; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 13px; }
+        .toast.success { border-left-color: var(--success-color); } .toast.error { border-left-color: var(--danger-color); } .toast.info { border-left-color: var(--accent-cyan); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes floatUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Welcome Banner - FIXED VISIBILITY */
+        #welcome-banner {
+            position: fixed; top: 40px; left: 50%; transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95); /* Solid dark background */
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--gradient-gold);
+            padding: 20px 40px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+            z-index: 10001; /* Very high z-index */
+            color: #fff;
+            text-align: center;
+            min-width: 350px;
+            animation: welcomeSlideDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        #welcome-banner h3 { 
+            margin: 0; 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 800; 
+            font-size: 18px; 
+            background: var(--gradient-gold); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+        #welcome-banner p { margin: 5px 0 0 0; font-size: 13px; color: #cbd5e1; }
+        
+        @keyframes welcomeSlideDown { from { opacity: 0; top: -50px; } to { opacity: 1; top: 40px; } }
+        @keyframes welcomeFadeOut { from { opacity: 1; top: 40px; } to { opacity: 0; top: -50px; } }
+
+        /* ESTILOS NOVOS PARA O PAINEL DE MODELOS (REFORMULADO) */
+        .templates-section {
+            background: rgba(2, 6, 23, 0.4); 
+            padding: 20px; 
+            border-radius: 16px;
+            margin-bottom: 25px; 
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .templates-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .templates-title-text {
+            font-size: 11px;
+            font-weight: 800;
+            color: #e2e8f0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            transition: all 0.3s;
+        }
+        .status-badge.online {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+        .status-badge.offline {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .custom-select-wrapper {
+            position: relative;
+        }
+        
+        .template-select {
+            width: 100%;
+            padding: 12px 15px;
+            padding-right: 35px; /* Espaço para a seta */
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            appearance: none; /* Remove seta padrão */
+            -webkit-appearance: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            outline: none;
+        }
+        
+        .template-select:hover {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+        
+        .template-select:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.1);
+        }
+
+        /* Seta personalizada via CSS */
+        .custom-select-wrapper::after {
+            content: '\f078'; /* FontAwesome chevron-down */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 10px;
+            pointer-events: none;
+        }
+
+        .template-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-modern {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-modern.save {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+        }
+        .btn-modern.save:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        .btn-modern.delete {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        .btn-modern.delete:hover { background: rgba(239, 68, 68, 0.2); color: #fff; }
+
+        .data-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            margin: 5px 0;
+            border: none;
+        }
+
+        .data-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: -5px;
+            display: block;
+        }
+
+        .btn-modern.data {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
+            width: 100%;
+        }
+        .btn-modern.data:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Removendo estilos antigos conflitantes se houver */
+        .templates-title, .btn-small, .btn-file { display: none; } 
+
+        /* PRINT SETTINGS */
         @page { margin: 0; }
         @page landscape-page { size: A4 landscape; margin: 0; }
         @page portrait-page { size: A4 portrait; margin: 0; }
-
         .a4-sheet { page: landscape-page; }
         .a4-sheet.sheet-portrait { page: portrait-page; }
 
         @media print {
             .sidebar { display: none !important; }
-            #login-screen, #admin-modal, #welcome-banner { display: none !important; }
-            #toast-container { display: none !important; }
-            #app-wrapper { display: flex !important; opacity: 1 !important; }
-            .main-content { padding: 0; margin: 0; height: 100%; background: none; display: block; }
+            #login-screen, #admin-modal, #welcome-banner, #toast-container { display: none !important; }
+            #app-wrapper { display: flex !important; opacity: 1 !important; background: none !important; }
+            .main-content { padding: 0; margin: 0; height: 100%; background: none; display: block; box-shadow: none; }
             .slide-container { width: auto; height: auto; max-width: none; max-height: none; aspect-ratio: auto; display: block; }
-            
             .a4-sheet { box-shadow: none; border: none; margin: 0; width: 297mm; height: 210mm; padding: 5mm 10mm !important; }
             .a4-sheet.sheet-portrait { width: 210mm; height: 297mm; padding: 10mm 15mm !important; }
-
             ::placeholder { color: transparent !important; }
-            
-            input:not(.sc-input-sm):not(#cnt-nome):not(#cnt-end):not(#cnt-nome-c):not(#cnt-end-c):not(#comp-data):not(#comp-hora-ini):not(#comp-hora-fim):not(#comp-motivo):not(#comp-nome-acomp),
-            textarea:not(#cnt-presc):not(#cnt-presc-c) { border-bottom: none !important; }
-            
+            input:not(.sc-input-sm):not(#cnt-nome):not(#cnt-end):not(#cnt-nome-c):not(#cnt-end-c):not(#comp-data):not(#comp-hora-ini):not(#comp-hora-fim):not(#comp-motivo):not(#comp-nome-acomp), textarea:not(#cnt-presc):not(#cnt-presc-c) { border-bottom: none !important; }
             img, .doc-label, .logo-placeholder, .exam-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .exam-item-compact input[type="checkbox"] { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .exam-item-compact:hover { background-color: transparent; }
-            
             .special-control-container { border-color: #000; height: 99%; }
             .sc-box, .sc-footer-box { border-color: #000; }
             .sc-box-title { background-color: #ddd !important; -webkit-print-color-adjust: exact; }
-            .sc-prescription-area { background-image: linear-gradient(transparent, transparent 29px, #999 30px) !important; -webkit-print-color-adjust: exact;}
-            
+            .sc-prescription-area { background-image: linear-gradient(transparent, transparent 29px, #999 30px) !important; -webkit-print-color-adjust: exact; display: flex !important; flex-direction: column !important; }
             .sc-input-sm, .sc-field-line input { border-bottom: 1px solid #000 !important; }
+            /* ESTILO DO CHECKBOX "X" PARA O RAIO-X */
+            .x-check { border: 1px solid #000 !important; }
+            .x-check:checked::before { color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+        
+        .atestado-body { font-family: 'Courier Prime', monospace; font-size: 15px; line-height: 2.4; text-align: justify; padding: 20px 0; color: #1a1a1a; }
+        .atestado-input { display: inline-block; text-align: center; font-weight: bold; }
+        .encaminhamento-title { font-weight: 800; border-bottom: 2px solid #2c3e50; display: inline-block; margin-bottom: 8px; font-size: 11px; color: #2c3e50; font-family: 'Inter', sans-serif; }
+        .exams-layout { display: flex; flex-grow: 1; gap: 10px; overflow: hidden; border-top: 1px solid #ddd; padding-top: 5px; flex-direction: column; }
+        .exam-header { font-size: 10px; font-weight: 700; background: #334155; color: white; text-align: center; padding: 4px; margin-bottom: 8px; text-transform: uppercase; border-radius: 2px; }
+        .compact-grid { display: grid; gap: 2px 8px; overflow-y: auto; flex-grow: 1; align-content: start; }
+        .compact-grid.two-cols { grid-template-columns: 1fr 1fr; }
+        .compact-grid.three-cols { grid-template-columns: 1fr 1fr 1fr; }
+        .exam-item-compact { font-family: 'Inter', sans-serif; font-size: 9px; display: flex; align-items: center; gap: 4px; line-height: 1.3; color: #333; }
+        .side-check { display: flex; justify-content: center; gap: 30px; margin-top: 8px; font-size: 10px; font-weight: bold; width: 100%; background: #f8f9fa; padding: 5px; border-radius: 4px; }
+        
+        /* ESTILO DO CHECKBOX "X" PARA O RAIO-X */
+        .x-check {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border: 1px solid #333;
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-right: 5px;
+            background: #fff;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .x-check:checked::before {
+            content: 'X';
+            font-size: 10px;
+            font-weight: 900;
+            color: #000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* ESTILOS NOVOS PARA A LISTA DE USUÁRIOS (PAINEL DEV) */
+        .admin-list-container {
+            height: 320px;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        /* Scrollbar personalizada */
+        .admin-list-container::-webkit-scrollbar { width: 4px; }
+        .admin-list-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+        .admin-list-container::-webkit-scrollbar-thumb { background: var(--accent-cyan); border-radius: 4px; }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .user-info-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        .user-role-badge {
+            font-size: 9px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .delete-user-btn {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-user-btn:hover {
+            background: #ef4444;
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
         }
     </style>
 </head>
@@ -902,187 +693,151 @@
 
     <div id="toast-container"></div>
 
-    <!-- TELA DE LOGIN -->
     <div id="login-screen">
-        <div class="login-glow"></div>
+        <div class="login-bg-effect"></div>
         <div class="login-card">
-            <div class="login-logo">
-                <i class="fa-solid fa-kit-medical"></i><br>
-                MedSync <span>Premium</span>
+            <div class="brand-logo" style="justify-content: center; transform: scale(1.2);">
+                <div class="brand-icon"><i class="fa-solid fa-staff-snake"></i></div>
+                <div class="brand-text"><span class="brand-name">MedSync</span><span class="brand-sub">Premium Access</span></div>
             </div>
             <div class="login-inputs">
-                <div class="login-input-group">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="login-user" placeholder="Usuário" autocomplete="off">
-                </div>
-                <div class="login-input-group">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="login-pass" placeholder="Senha" onkeypress="if(event.key === 'Enter') window.doLogin()">
-                </div>
-                <button onclick="window.doLogin()" class="login-btn">Acessar Sistema</button>
+                <div class="login-input-group"><input type="text" id="login-user" placeholder="ID de Usuário" autocomplete="off"><i class="fa-solid fa-user-doctor"></i></div>
+                <div class="login-input-group"><input type="password" id="login-pass" placeholder="Senha de Acesso" onkeypress="if(event.key === 'Enter') window.doLogin()"><i class="fa-solid fa-fingerprint"></i></div>
+                <button onclick="window.doLogin()" class="login-btn">Entrar no Sistema <i class="fa-solid fa-arrow-right" style="margin-left:8px;"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- PAINEL ADMIN (Mestre) -->
-    <div id="admin-modal">
+    <!-- PAINEL ADMIN CENTRALIZADO -->
+    <div id="admin-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
         <div class="admin-card">
-            <h3><i class="fa-solid fa-crown"></i> Gerenciar Acessos</h3>
-            
-            <div class="admin-list" id="admin-users-list">
-                <!-- Lista de usuários preenchida via JS -->
-            </div>
+            <h3><i class="fa-solid fa-crown"></i> Painel de Controle Master</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; height: 350px;">
+                
+                <!-- Coluna Esquerda: Lista com NOVO VISUAL -->
+                <div style="display: flex; flex-direction: column; height: 100%;">
+                    <h4 style="color: #94a3b8; margin-top: 0; margin-bottom: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <i class="fa-solid fa-users"></i> Usuários Ativos
+                    </h4>
+                    <!-- Container com a nova classe CSS para scroll e layout -->
+                    <div id="admin-users-list" class="admin-list-container">
+                        <!-- Itens inseridos via JS -->
+                    </div>
+                </div>
 
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <input type="text" id="new-user-name" placeholder="Novo Usuário" style="padding:10px; border-radius:6px; border:1px solid #334155; background:#0f172a; color:#fff;">
-                <input type="password" id="new-user-pass" placeholder="Senha" style="padding:10px; border-radius:6px; border:1px solid #334155; background:#0f172a; color:#fff;">
-                <button onclick="window.createUser()" style="background:var(--success-color); color:#fff; border:none; padding:10px; border-radius:6px; cursor:pointer; font-weight:bold;">Criar Usuário</button>
-                <button onclick="window.closeAdmin()" style="background:transparent; color:#94a3b8; border:none; padding:10px; cursor:pointer;">Fechar Painel</button>
+                <!-- Coluna Direita: Ações -->
+                <div style="display:flex; flex-direction:column; gap:15px; justify-content: flex-start; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 30px;">
+                    <h4 style="color: #94a3b8; margin-top: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <i class="fa-solid fa-user-plus"></i> Novo Acesso
+                    </h4>
+                    <input type="text" id="new-user-name" placeholder="Nome do Usuário" style="padding:15px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; font-size: 14px; outline: none;">
+                    <input type="password" id="new-user-pass" placeholder="Senha de Acesso" style="padding:15px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.3); color:#fff; width:100%; font-size: 14px; outline: none;">
+                    
+                    <button onclick="window.createUser()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color:#fff; border:none; padding:15px; border-radius:10px; cursor:pointer; font-weight:800; text-transform: uppercase; margin-top: 5px; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2); transition: transform 0.2s;">
+                        <i class="fa-solid fa-check"></i> Criar Usuário
+                    </button>
+                    
+                    <div style="flex-grow: 1;"></div>
+                    
+                    <button onclick="window.closeAdmin()" style="background:transparent; color:#94a3b8; border:1px solid rgba(255,255,255,0.1); padding:12px; cursor:pointer; width: 100%; border-radius: 10px; font-weight: 600; font-size: 12px; transition: all 0.2s;">
+                        FECHAR PAINEL
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- APP PRINCIPAL (Envolvido para ocultar no início) -->
     <div id="app-wrapper">
-        <!-- MENU LATERAL -->
         <div class="sidebar">
-            <h2>
-                <i class="fa-solid fa-kit-medical"></i>
-                MedSync <span>Premium</span>
-            </h2>
-            
-            <div class="author-badge">
-                CRIADO POR <br>
-                <span>RAFAEL ALBUQUERQUE</span>
-                <br>
-                <a href="https://wa.me/5568999991258" target="_blank" class="whatsapp-link">
-                    <i class="fa-brands fa-whatsapp" style="font-size: 14px;"></i> Contato WhatsApp
-                </a>
-            </div>
-            
+            <div class="brand-logo"><div class="brand-icon"><i class="fa-solid fa-staff-snake"></i></div><div class="brand-text"><span class="brand-name">MedSync</span><span class="brand-sub">Premium</span></div></div>
+            <div class="author-badge">Desenvolvido por <br><span>Rafael Albuquerque</span><br><a href="https://wa.me/5568999991258" target="_blank" class="whatsapp-link"><i class="fa-brands fa-whatsapp" style="font-size: 14px;"></i> Contato WhatsApp</a></div>
             <div class="nav-section">
-                <button class="menu-btn active" onclick="switchTab('receita')">
-                    <i class="fa-solid fa-prescription-bottle-medical"></i> Receituário
-                </button>
-                <button class="menu-btn" onclick="switchTab('controle')">
-                    <i class="fa-solid fa-file-shield"></i> Controle Especial
-                </button>
-                <button class="menu-btn" onclick="switchTab('atestado')">
-                    <i class="fa-solid fa-file-signature"></i> Atestado Médico
-                </button>
-                <button class="menu-btn" onclick="switchTab('comparecimento')">
-                    <i class="fa-solid fa-clock"></i> Comparecimento
-                </button>
-                <button class="menu-btn" onclick="switchTab('exames')">
-                    <i class="fa-solid fa-microscope"></i> Exames & Raio X
-                </button>
-                <button class="menu-btn" onclick="switchTab('encaminhamento')">
-                    <i class="fa-solid fa-user-doctor"></i> Encaminhamento
-                </button>
-
-                <!-- Botão de Administração (Invisível por padrão) -->
-                <button class="menu-btn" id="btn-admin-panel" onclick="window.openAdmin()">
-                    <i class="fa-solid fa-crown"></i> Painel DEV
-                </button>
-
-                <!-- Botão de Sair / Trocar Usuário -->
-                <button class="menu-btn" onclick="window.doLogout()" style="color: #ef4444; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); border-radius: 0 0 8px 8px; padding-top: 20px;">
-                    <i class="fa-solid fa-right-from-bracket"></i> Sair do Sistema
-                </button>
+                <button class="menu-btn active" onclick="switchTab('receita')"><i class="fa-solid fa-prescription-bottle-medical"></i> Receituário</button>
+                <button class="menu-btn" onclick="switchTab('controle')"><i class="fa-solid fa-file-shield"></i> Controle Especial</button>
+                <button class="menu-btn" onclick="switchTab('atestado')"><i class="fa-solid fa-file-signature"></i> Atestado Médico</button>
+                <button class="menu-btn" onclick="switchTab('comparecimento')"><i class="fa-solid fa-clock"></i> Comparecimento</button>
+                <button class="menu-btn" onclick="switchTab('exames')"><i class="fa-solid fa-microscope"></i> Exames & Raio X</button>
+                <button class="menu-btn" onclick="switchTab('encaminhamento')"><i class="fa-solid fa-user-doctor"></i> Encaminhamento</button>
+                <button class="menu-btn" id="btn-admin-panel" onclick="window.openAdmin()" style="display: none; border: 1px dashed var(--text-gold); color: var(--text-gold);"><i class="fa-solid fa-crown"></i> Painel DEV</button>
+                <button class="menu-btn" onclick="window.doLogout()" style="color: #ef4444; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); border-radius: 0 0 12px 12px; padding-top: 20px;"><i class="fa-solid fa-power-off"></i> Sair do Sistema</button>
             </div>
-
-            <!-- Calculadora Pediátrica -->
+            
             <div class="calc-section">
-                <div style="font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 15px; color: #fff; text-transform: uppercase; letter-spacing: 1px;">
-                    <i class="fa-solid fa-baby"></i> Calc. Pediátrica
-                </div>
-                
-                <label class="calc-label">PESO (Kg):</label>
-                <input type="number" id="calc-peso" class="calc-input" placeholder="Ex: 15.5">
-                
+                <div style="font-size: 11px; font-weight: 800; text-align: center; margin-bottom: 15px; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; display:flex; align-items:center; justify-content:center; gap:8px;"><i class="fa-solid fa-baby"></i> Calc. Pediátrica</div>
+                <label class="calc-label">PESO (Kg):</label><input type="number" id="calc-peso" class="calc-input" placeholder="Ex: 15.5">
                 <label class="calc-label">MEDICAÇÃO:</label>
                 <select id="calc-med" class="calc-input" style="cursor: pointer;">
-                    <option value="dip">Dipirona Gotas (500mg/ml)</option>
-                    <option value="parac">Paracetamol Gotas (200mg/ml)</option>
-                    <option value="ibu">Ibuprofeno Gotas (50mg/ml)</option>
-                    <option value="amox">Amoxicilina (250mg/5ml)</option>
-                    <option value="azitro">Azitromicina (200mg/5ml)</option>
-                    <option value="cefa">Cefalexina (250mg/5ml)</option>
-                    <option value="pred">Prednisolona (3mg/ml)</option>
-                    <option value="dex">Dexclorfeniramina (0.4mg/ml)</option>
+                    <option value="dip">Dipirona Gotas (500mg/ml)</option><option value="parac">Paracetamol Gotas (200mg/ml)</option><option value="ibu">Ibuprofeno Gotas (50mg/ml)</option><option value="amox">Amoxicilina (250mg/5ml)</option><option value="azitro">Azitromicina (200mg/5ml)</option><option value="cefa">Cefalexina (250mg/5ml)</option><option value="pred">Prednisolona (3mg/ml)</option><option value="dex">Dexclorfeniramina (0.4mg/ml)</option>
                 </select>
-
-                <button class="btn-small btn-save" style="width: 100%;" onclick="window.calcularPediatria()">CALCULAR DOSE</button>
-                
-                <div id="calc-result" class="calc-result"></div>
+                <button class="btn-small btn-save" style="width: 100%;" onclick="window.calcularPediatria()">CALCULAR DOSE</button><div id="calc-result" class="calc-result"></div>
             </div>
 
-            <!-- Gerenciador de Modelos -->
+            <!-- PAINEL DE MODELOS REDESENHADO -->
             <div class="templates-section" id="template-panel">
-                <div class="templates-title" style="display: flex; justify-content: space-between; align-items: center;">
-                    <span><i class="fa-solid fa-bookmark"></i> Modelos Salvos</span>
-                    <span id="db-status" style="font-size: 9px; color: #94a3b8; display: flex; align-items: center; gap: 4px; text-transform: none; font-weight: 500;">
-                        Aguardando...
-                    </span>
+                <!-- Cabeçalho com Status -->
+                <div class="templates-header">
+                    <div class="templates-title-text"><i class="fa-solid fa-bookmark" style="color: var(--accent-cyan);"></i> Modelos Salvos</div>
+                    <div id="db-status" class="status-badge">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Conectando...
+                    </div>
                 </div>
-                <select id="template-select" class="template-select" onchange="window.loadSelectedTemplate()">
-                    <option value="">Selecione um modelo...</option>
-                </select>
+
+                <!-- Dropdown Estilizado -->
+                <div class="custom-select-wrapper">
+                    <select id="template-select" class="template-select" onchange="window.loadSelectedTemplate()">
+                        <option value="">Selecione um modelo...</option>
+                    </select>
+                </div>
+
+                <!-- Botões de Ação Principais -->
                 <div class="template-actions">
-                    <button class="btn-small btn-save" onclick="window.saveCurrentAsTemplate()"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
-                    <button class="btn-small btn-del" onclick="window.deleteTemplate()"><i class="fa-solid fa-trash-can"></i> Excluir</button>
+                    <button class="btn-modern save" onclick="window.saveCurrentAsTemplate()">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar
+                    </button>
+                    <button class="btn-modern delete" onclick="window.deleteTemplate()">
+                        <i class="fa-solid fa-trash-can"></i> Excluir
+                    </button>
                 </div>
-                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-                <div class="templates-title">Dados</div>
-                <button class="btn-small btn-file" onclick="window.exportBackup()"><i class="fa-solid fa-cloud-arrow-down"></i> Backup (Download)</button>
-                <button class="btn-small btn-file" onclick="document.getElementById('import-file').click()"><i class="fa-solid fa-cloud-arrow-up"></i> Restaurar</button>
+
+                <!-- Divisor Sutil -->
+                <hr class="data-divider">
+
+                <!-- Seção de Dados -->
+                <label class="data-label">Banco de Dados</label>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-modern data" onclick="window.exportBackup()" style="flex: 1;">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Backup
+                    </button>
+                    <button class="btn-modern data" onclick="document.getElementById('import-file').click()" style="flex: 1;">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Restaurar
+                    </button>
+                </div>
+                
                 <input type="file" id="import-file" style="display: none;" accept=".json" onchange="window.importBackup(this)">
             </div>
 
-            <button class="print-action" onclick="window.print()">
-                <i class="fa-solid fa-print"></i> IMPRIMIR
-            </button>
+            <button class="print-action" onclick="window.print()"><i class="fa-solid fa-print"></i> IMPRIMIR</button>
         </div>
 
-        <!-- ÁREA PRINCIPAL DA FOLHA -->
         <div class="main-content">
             <div class="slide-container" id="slide-container">
                 <div class="a4-sheet" id="a4-sheet">
-                    
-                    <!-- LADO ESQUERDO (Editor Principal) -->
+                    <!-- LADO ESQUERDO -->
                     <div class="prescription-half" id="editor-side">
-                        <!-- Cabeçalho GERAL -->
                         <div class="header" id="main-header">
                             <div class="header-content">
-                                <div class="logo-area">
-                                    <div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-star-of-life"></i></div>
-                                    <img src="brasao_pmac.png" class="logo-img" alt="PMAC" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'">
-                                </div>
-                                <div class="titles-area header-titles">
-                                    <h1>GOVERNO DO ESTADO DO ACRE</h1>
-                                    <h2>POLÍCIA MILITAR - DIRETORIA DE SAÚDE</h2>
-                                    <h2>SEÇÃO DE SAÚDE DE 5º BPM - BRASILEIA</h2>
-                                </div>
-                                <div class="logo-area">
-                                    <div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-hospital"></i></div>
-                                    <img src="brasao_acre.png" class="logo-img" alt="ACRE" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'">
-                                </div>
+                                <div class="logo-area"><div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-star-of-life"></i></div><img src="brasao_pmac.png" class="logo-img" alt="PMAC" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'"></div>
+                                <div class="titles-area header-titles"><h1>GOVERNO DO ESTADO DO ACRE</h1><h2>POLÍCIA MILITAR - DIRETORIA DE SAÚDE</h2><h2>SEÇÃO DE SAÚDE DE 5º BPM - BRASILEIA</h2></div>
+                                <div class="logo-area"><div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-hospital"></i></div><img src="brasao_acre.png" class="logo-img" alt="ACRE" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'"></div>
                             </div>
                             <div class="doc-label" id="doc-label-left">RECEITUÁRIO</div>
                         </div>
 
-                        <!-- Módulo 1: RECEITUÁRIO COMUM -->
+                        <!-- 1. RECEITUÁRIO COMUM (ESQUERDA) -->
                         <div id="tab-receita-left" class="tab-content active">
                             <div class="body-content">
-                                <div class="field-group">
-                                    <span class="label">Paciente:</span>
-                                    <input type="text" id="rec-nome" oninput="window.syncVal('rec-nome', 'rec-nome-copy')" placeholder="Nome do Paciente">
-                                </div>
-                                <div class="field-group">
-                                    <span class="label">Uso:</span>
-                                    <input type="text" id="rec-via" value="USO ORAL" oninput="window.syncVal('rec-via', 'rec-via-copy')" style="font-weight: bold;">
-                                </div>
-
+                                <div class="field-group"><span class="label">Paciente:</span><input type="text" id="rec-nome" oninput="window.syncVal('rec-nome', 'rec-nome-copy')" placeholder="Nome do Paciente"></div>
+                                <div class="field-group"><span class="label">Uso:</span><input type="text" id="rec-via" value="USO ORAL" oninput="window.syncVal('rec-via', 'rec-via-copy')" style="font-weight: bold;"></div>
                                 <div class="medication-list" style="margin-top: 15px;">
                                     <div class="med-block"><div class="med-row-1"><span class="med-number">01.</span><input type="text" id="med1" oninput="window.syncVal('med1','med1-c')" placeholder="Medicação"><input type="text" id="qtd1" oninput="window.syncVal('qtd1','qtd1-c')" placeholder="Qtd" style="text-align:center;"></div><div class="med-row-2"><textarea rows="1" id="pos1" oninput="window.syncVal('pos1','pos1-c')" placeholder="Posologia"></textarea><input type="text" id="hor1" oninput="window.syncVal('hor1','hor1-c')" placeholder="Horário"></div></div>
                                     <div class="med-block"><div class="med-row-1"><span class="med-number">02.</span><input type="text" id="med2" oninput="window.syncVal('med2','med2-c')"><input type="text" id="qtd2" oninput="window.syncVal('qtd2','qtd2-c')"></div><div class="med-row-2"><textarea rows="1" id="pos2" oninput="window.syncVal('pos2','pos2-c')"></textarea><input type="text" id="hor2" oninput="window.syncVal('hor2','hor2-c')"></div></div>
@@ -1094,221 +849,110 @@
                             </div>
                         </div>
 
-                        <!-- Módulo: CONTROLE ESPECIAL -->
+                        <!-- 2. CONTROLE ESPECIAL (ESQUERDA - 1ª VIA) -->
                         <div id="tab-controle-left" class="tab-content">
                             <div class="special-control-container">
-                                <div class="sc-header">RECEITUÁRIO DE CONTROLE ESPECIAL</div>
-                                <div class="sc-sub-header">1ª Via - Farmácia</div>
-                                
-                                <div class="sc-box">
-                                    <div class="sc-box-title">IDENTIFICAÇÃO DO EMITENTE</div>
-                                    <div class="sc-emitente-info">
-                                        <strong>POLÍCIA MILITAR DO ESTADO DO ACRE</strong><br>
-                                        FUNDO DE SAÚDE - POLICLÍNICA<br>
-                                        CNPJ: 23.380.324/0001-06<br>
-                                        Rua: Omar Sabino, nº 283 - Bairro Mascarenhas de Moraes - CEP: 69.918-000
-                                    </div>
-                                </div>
-
+                                <div class="sc-header">RECEITUÁRIO DE CONTROLE ESPECIAL</div><div class="sc-sub-header">1ª Via - Farmácia</div>
+                                <div class="sc-box"><div class="sc-box-title">IDENTIFICAÇÃO DO EMITENTE</div><div class="sc-emitente-info"><strong>POLÍCIA MILITAR DO ESTADO DO ACRE</strong><br>DSAU - SEÇÃO DE SAÚDE DO 5º BPM – BRASILEIA<br>CNPJ: 23.380.324/0001-06<br>Avenida Rui Lino, 599 – Bairro: Centro, Brasileia - Acre – CEP: 69.932-000</div></div>
                                 <div style="margin-bottom: 5px;">
                                     <div class="sc-field-line"><span style="width: 60px;">Paciente:</span><input type="text" id="cnt-nome" oninput="window.syncVal('cnt-nome', 'cnt-nome-c')" style="flex-grow: 1;"></div>
                                     <div class="sc-field-line"><span style="width: 60px;">Endereço:</span><input type="text" id="cnt-end" oninput="window.syncVal('cnt-end', 'cnt-end-c')" style="flex-grow: 1;"></div>
                                     <div class="sc-field-line"><span style="width: 60px;">Prescrição:</span></div>
                                 </div>
-
                                 <div class="sc-prescription-area">
                                     <textarea id="cnt-presc" oninput="window.syncVal('cnt-presc', 'cnt-presc-c')"></textarea>
+                                    
+                                    <!-- RODAPÉ DA PRESCRIÇÃO (DATA/HORA/ASSINATURA) - AJUSTADO -->
+                                    <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 5px 10px; border-top: 1px dashed rgba(0,0,0,0.2); background: rgba(255,255,255,0.5); margin-top: auto;">
+                                        <div style="display: flex; gap: 15px; margin-bottom: 5px;">
+                                            <div style="display: flex; align-items: center; gap: 5px;">
+                                                <span style="font-weight: bold; font-size: 10px;">DATA:</span>
+                                                <input type="text" id="cnt-data" oninput="window.syncVal('cnt-data', 'cnt-data-c')" style="border:none; border-bottom: 1px solid #000; width: 80px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 5px;">
+                                                <span style="font-weight: bold; font-size: 10px;">HORA:</span>
+                                                <input type="text" id="cnt-hora" oninput="window.syncVal('cnt-hora', 'cnt-hora-c')" style="border:none; border-bottom: 1px solid #000; width: 50px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- ASSINATURA AJUSTADA (TEXTO ABAIXO DA LINHA) -->
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                                            <div style="border-bottom: 1px solid #000; width: 200px; margin-bottom: 2px;"></div>
+                                            <span style="font-weight: bold; font-size: 8px; letter-spacing: 0.5px;">ASSINATURA DO MÉDICO</span>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="sc-footer-grid">
+                                <div class="sc-footer-grid" style="height: 140px;">
                                     <div class="sc-footer-box">
                                         <div class="sc-box-title">IDENTIFICAÇÃO DO COMPRADOR</div>
                                         <div class="sc-footer-content">
-                                            <div>Nome: <input type="text" class="sc-input-sm"></div>
-                                            <div style="display:flex; gap:5px;"><span style="white-space:nowrap">Ident.Nº:</span><input type="text" class="sc-input-sm" style="width:70px"><span style="white-space:nowrap">Órgão Exp:</span><input type="text" class="sc-input-sm"></div>
-                                            <div>Endereço: <input type="text" class="sc-input-sm"></div>
-                                            <div style="display:flex; gap:5px;"><span>Cidade:</span><input type="text" class="sc-input-sm"><span>UF:</span><input type="text" class="sc-input-sm" style="width:30px"></div>
-                                            <div>Telefone: <input type="text" class="sc-input-sm"></div>
+                                            <div style="display:flex; align-items: flex-end; gap: 3px;"><span style="font-weight:bold;">Nome:</span> <input type="text" class="sc-input-sm"></div>
+                                            <div style="display:flex; gap:5px; margin-top: 2px;"><span style="white-space:nowrap; font-weight:bold;">Ident.Nº:</span><input type="text" class="sc-input-sm" style="width:70px"><span style="white-space:nowrap; font-weight:bold;">Órgão Exp:</span><input type="text" class="sc-input-sm"></div>
+                                            <div style="display:flex; align-items: flex-end; gap: 3px; margin-top: 2px;"><span style="font-weight:bold;">Endereço:</span> <input type="text" class="sc-input-sm"></div>
+                                            <div style="display:flex; gap:5px; margin-top: 2px;"><span style="font-weight:bold;">Cidade:</span><input type="text" class="sc-input-sm"><span style="font-weight:bold;">UF:</span><input type="text" class="sc-input-sm" style="width:30px"></div>
+                                            <div style="display:flex; align-items: flex-end; gap: 3px; margin-top: 2px;"><span style="font-weight:bold;">Telefone:</span> <input type="text" class="sc-input-sm"></div>
                                         </div>
                                     </div>
                                     <div class="sc-footer-box">
                                         <div class="sc-box-title">IDENTIFICAÇÃO DO FORNECEDOR</div>
-                                        <div class="sc-footer-content" style="align-items: center; justify-content: flex-end; text-align: center;">
-                                            <div style="border-top: 1px solid #000; width: 80%; padding-top: 2px;">Assinatura do Farmacêutico</div>
-                                            <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 5px;">Data: ___/___/___</div>
+                                        <div class="sc-footer-content">
+                                            <div style="flex-grow: 1;"></div>
+                                            <div style="width: 100%; text-align: center; margin-bottom: 5px;"><div style="border-top: 1px solid #000; width: 90%; margin: 0 auto; padding-top: 2px; font-weight: bold;">Assinatura do Farmacêutico</div></div>
+                                            <div style="width: 100%; display: flex; justify-content: center; align-items: flex-end; gap: 5px; margin-bottom: 5px;"><span style="font-weight: bold;">Data:</span> <div style="width: 25px; border-bottom: 1px solid #000;"></div>/<div style="width: 25px; border-bottom: 1px solid #000;"></div>/<div style="width: 35px; border-bottom: 1px solid #000;"></div></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Módulo: ATESTADO -->
                         <div id="tab-atestado-left" class="tab-content">
-                            <div class="atestado-body">
-                                Atesto para os devidos fins que o(a) Sr(a)<br>
-                                <input type="text" id="atest-nome" oninput="window.syncVal('atest-nome','atest-nome-c')" placeholder="Nome do Paciente" style="font-weight:bold; margin: 10px 0; font-size: 16px;"><br>
-                                foi atendido(a) nesta unidade de saúde nesta data, necessitando de<br>
-                                <input type="text" id="atest-dias" oninput="window.syncVal('atest-dias','atest-dias-c')" class="atestado-input" style="width: 60px; font-weight:bold; font-size: 16px;"> dias de afastamento<br>
-                                de suas atividades laborais.<br><br>
-                                CID: <input type="text" id="atest-cid" oninput="window.syncVal('atest-cid','atest-cid-c')" style="width: 120px; font-weight: bold;">
-                            </div>
+                            <div class="atestado-body">Atesto para os devidos fins que o(a) Sr(a)<br><input type="text" id="atest-nome" oninput="window.syncVal('atest-nome','atest-nome-c')" placeholder="Nome do Paciente" style="font-weight:bold; margin: 10px 0; font-size: 16px;"><br>foi atendido(a) nesta unidade de saúde nesta data, necessitando de<br><input type="text" id="atest-dias" oninput="window.syncVal('atest-dias','atest-dias-c')" class="atestado-input" style="width: 60px; font-weight:bold; font-size: 16px;"> dias de afastamento<br>de suas atividades laborais.<br><br>CID: <input type="text" id="atest-cid" oninput="window.syncVal('atest-cid','atest-cid-c')" style="width: 120px; font-weight: bold;"></div>
                         </div>
 
-                        <!-- Módulo: DECLARAÇÃO DE COMPARECIMENTO -->
                         <div id="tab-comparecimento-left" class="tab-content">
-                            <div class="atestado-body" style="font-size: 14px; line-height: 2.2;">
-                                <h3 style="text-align:center; text-decoration: underline; margin-bottom: 20px;">DECLARAÇÃO DE COMPARECIMENTO</h3>
-                                
-                                Declaro para os devidos fins que o(a) Sr(a)<br>
-                                <input type="text" id="comp-nome" oninput="window.syncVal('comp-nome','comp-nome-c')" placeholder="Nome do Paciente" style="font-weight:bold; margin: 5px 0; font-size: 16px; width: 100%;"><br>
-                                
-                                esteve presente nesta unidade de saúde no dia <input type="text" id="comp-data" style="width: 120px; font-weight: bold; text-align: center;">,<br>
-                                no período das <input type="text" id="comp-hora-ini" style="width: 70px; font-weight: bold; text-align: center;" placeholder="00:00"> 
-                                às <input type="text" id="comp-hora-fim" style="width: 70px; font-weight: bold; text-align: center;" placeholder="00:00"> horas,<br>
-                                para realização de: <input type="text" id="comp-motivo" placeholder="Consulta Médica / Exames" style="width: 100%; margin-top: 5px;">.<br><br>
-
-                                <div style="border: 1px dashed #ccc; padding: 10px; border-radius: 4px; margin-top: 10px;">
-                                    <label style="font-weight: bold; display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; color: #555;">
-                                        <input type="checkbox" id="comp-check-acompanhante" onchange="window.toggleAcompanhante()" style="border: 1px solid #ccc;"> 
-                                        ACOMPANHANTE (Marque se houver)
-                                    </label>
-                                    <div id="area-acompanhante" style="display: none; margin-top: 10px; border-top: 1px solid #eee; padding-top: 5px;">
-                                        Acompanhando o(a) paciente acima citado(a).<br>Nome do Acompanhante:<br>
-                                        <input type="text" id="comp-nome-acomp" style="width: 100%; font-weight: bold;">
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="atestado-body" style="font-size: 14px; line-height: 2.2;"><h3 style="text-align:center; text-decoration: underline; margin-bottom: 20px;">DECLARAÇÃO DE COMPARECIMENTO</h3>Declaro para os devidos fins que o(a) Sr(a)<br><input type="text" id="comp-nome" oninput="window.syncVal('comp-nome','comp-nome-c')" placeholder="Nome do Paciente" style="font-weight:bold; margin: 5px 0; font-size: 16px; width: 100%;"><br>esteve presente nesta unidade de saúde no dia <input type="text" id="comp-data" style="width: 120px; font-weight: bold; text-align: center;">,<br>no período das <input type="text" id="comp-hora-ini" style="width: 70px; font-weight: bold; text-align: center;" placeholder="00:00"> às <input type="text" id="comp-hora-fim" style="width: 70px; font-weight: bold; text-align: center;" placeholder="00:00"> horas,<br>para realização de: <input type="text" id="comp-motivo" placeholder="Consulta Médica / Exames" style="width: 100%; margin-top: 5px;">.<br><br><div style="border: 1px dashed #ccc; padding: 10px; border-radius: 4px; margin-top: 10px;"><label style="font-weight: bold; display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; color: #555;"><input type="checkbox" id="comp-check-acompanhante" onchange="window.toggleAcompanhante()" style="border: 1px solid #ccc;"> ACOMPANHANTE (Marque se houver)</label><div id="area-acompanhante" style="display: none; margin-top: 10px; border-top: 1px solid #eee; padding-top: 5px;">Acompanhando o(a) paciente acima citado(a).<br>Nome do Acompanhante:<br><input type="text" id="comp-nome-acomp" style="width: 100%; font-weight: bold;"></div></div></div>
                         </div>
 
-                        <!-- Módulo: EXAMES LABORATORIAIS -->
                         <div id="tab-exames-left" class="tab-content">
                             <div class="body-content" style="display:flex; flex-direction:column; height:100%;">
-                                <div class="field-group">
-                                    <span class="label">Paciente:</span><input type="text" id="exam-nome" oninput="window.syncVal('exam-nome', 'exam-nome-c')">
-                                </div>
-                                <div class="field-group">
-                                    <span class="label">Idade:</span><input type="text" id="exam-idade" oninput="window.syncVal('exam-idade', 'exam-idade-c')" style="width: 50px;">
-                                </div>
-                                <div class="exams-layout">
-                                    <div class="exam-header">SOLICITAÇÃO DE EXAMES LABORATORIAIS</div>
-                                    <div class="compact-grid three-cols">
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb1"> Ácido Úrico</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb2"> Albumina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb3"> Alt - (TGP)</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb4"> VDRL</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb5"> Vhs</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb6"> Amilase Aslo</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb7"> Ast - (TGO)</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb8"> Bilirrubina Direta</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb9"> Bilirrubina Total</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb10"> Cálcio</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb11"> Ck-mb</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb12"> Ck-Nac</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb13"> Cloro (cl)</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb14"> Coagulograma</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb15"> Colesterol HDL</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb16"> Colesterol Total</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb17"> Creatinina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb18"> CRP Hs Turbitest</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb19"> D-Dímero</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb20"> Desidrogenase Lática</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb21"> E.A.S. Urina Tipo I</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb22"> Eritrograma</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb23"> Fator Rh</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb24"> Ferritina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb25"> Fosfatase Alcalina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb26"> Gama GT</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb27"> Gasometria Portátil</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb28"> Hematócrito</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb29"> Hemograma Completo</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb30"> LDH</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb31"> Leucograma</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb32"> Lipase</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb33"> Magnésio</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb34"> Triglicerídeos</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb35"> Plaquetas</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb36"> Proteína C Reativa</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb37"> Glicemia</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb38"> Insulina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb39"> Proteinas Totais</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb40"> Proteínura 24hs</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb41"> Sódio</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb42"> Swab Rápido</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb43"> T. de Coagulação</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb44"> Troponina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb45"> Uréia</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb46"> T. Tromboplastina</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb47"> T. Protombínica</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb48"> T. de Gravidez</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb49"> Tipagem Sanguínea</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb50"> ZDC</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb51"> Febre Amarela</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb52"> Potássio</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb53"> Painel Viral</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb54"> Teste Rápido COVID</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb55"> Teste Dengue</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="lb56"> Fósforo</label>
-                                    </div>
-                                </div>
+                                <div class="field-group"><span class="label">Paciente:</span><input type="text" id="exam-nome" oninput="window.syncVal('exam-nome', 'exam-nome-c')"></div>
+                                <div class="field-group"><span class="label">Idade:</span><input type="text" id="exam-idade" oninput="window.syncVal('exam-idade', 'exam-idade-c')" style="width: 50px;"></div>
+                                <div class="exams-layout"><div class="exam-header">SOLICITAÇÃO DE EXAMES LABORATORIAIS</div><div class="compact-grid three-cols"><label class="exam-item-compact"><input type="checkbox" id="lb1"> Ácido Úrico</label><label class="exam-item-compact"><input type="checkbox" id="lb2"> Albumina</label><label class="exam-item-compact"><input type="checkbox" id="lb3"> Alt - (TGP)</label><label class="exam-item-compact"><input type="checkbox" id="lb4"> VDRL</label><label class="exam-item-compact"><input type="checkbox" id="lb5"> Vhs</label><label class="exam-item-compact"><input type="checkbox" id="lb6"> Amilase Aslo</label><label class="exam-item-compact"><input type="checkbox" id="lb7"> Ast - (TGO)</label><label class="exam-item-compact"><input type="checkbox" id="lb8"> Bilirrubina Direta</label><label class="exam-item-compact"><input type="checkbox" id="lb9"> Bilirrubina Total</label><label class="exam-item-compact"><input type="checkbox" id="lb10"> Cálcio</label><label class="exam-item-compact"><input type="checkbox" id="lb11"> Ck-mb</label><label class="exam-item-compact"><input type="checkbox" id="lb12"> Ck-Nac</label><label class="exam-item-compact"><input type="checkbox" id="lb13"> Cloro (cl)</label><label class="exam-item-compact"><input type="checkbox" id="lb14"> Coagulograma</label><label class="exam-item-compact"><input type="checkbox" id="lb15"> Colesterol HDL</label><label class="exam-item-compact"><input type="checkbox" id="lb16"> Colesterol Total</label><label class="exam-item-compact"><input type="checkbox" id="lb17"> Creatinina</label><label class="exam-item-compact"><input type="checkbox" id="lb18"> CRP Hs Turbitest</label><label class="exam-item-compact"><input type="checkbox" id="lb19"> D-Dímero</label><label class="exam-item-compact"><input type="checkbox" id="lb20"> Desidrogenase Lática</label><label class="exam-item-compact"><input type="checkbox" id="lb21"> E.A.S. Urina Tipo I</label><label class="exam-item-compact"><input type="checkbox" id="lb22"> Eritrograma</label><label class="exam-item-compact"><input type="checkbox" id="lb23"> Fator Rh</label><label class="exam-item-compact"><input type="checkbox" id="lb24"> Ferritina</label><label class="exam-item-compact"><input type="checkbox" id="lb25"> Fosfatase Alcalina</label><label class="exam-item-compact"><input type="checkbox" id="lb26"> Gama GT</label><label class="exam-item-compact"><input type="checkbox" id="lb27"> Gasometria Portátil</label><label class="exam-item-compact"><input type="checkbox" id="lb28"> Hematócrito</label><label class="exam-item-compact"><input type="checkbox" id="lb29"> Hemograma Completo</label><label class="exam-item-compact"><input type="checkbox" id="lb30"> LDH</label><label class="exam-item-compact"><input type="checkbox" id="lb31"> Leucograma</label><label class="exam-item-compact"><input type="checkbox" id="lb32"> Lipase</label><label class="exam-item-compact"><input type="checkbox" id="lb33"> Magnésio</label><label class="exam-item-compact"><input type="checkbox" id="lb34"> Triglicerídeos</label><label class="exam-item-compact"><input type="checkbox" id="lb35"> Plaquetas</label><label class="exam-item-compact"><input type="checkbox" id="lb36"> Proteína C Reativa</label><label class="exam-item-compact"><input type="checkbox" id="lb37"> Glicemia</label><label class="exam-item-compact"><input type="checkbox" id="lb38"> Insulina</label><label class="exam-item-compact"><input type="checkbox" id="lb39"> Proteinas Totais</label><label class="exam-item-compact"><input type="checkbox" id="lb40"> Proteínura 24hs</label><label class="exam-item-compact"><input type="checkbox" id="lb41"> Sódio</label><label class="exam-item-compact"><input type="checkbox" id="lb42"> Swab Rápido</label><label class="exam-item-compact"><input type="checkbox" id="lb43"> T. de Coagulação</label><label class="exam-item-compact"><input type="checkbox" id="lb44"> Troponina</label><label class="exam-item-compact"><input type="checkbox" id="lb45"> Uréia</label><label class="exam-item-compact"><input type="checkbox" id="lb46"> T. Tromboplastina</label><label class="exam-item-compact"><input type="checkbox" id="lb47"> T. Protombínica</label><label class="exam-item-compact"><input type="checkbox" id="lb48"> T. de Gravidez</label><label class="exam-item-compact"><input type="checkbox" id="lb49"> Tipagem Sanguínea</label><label class="exam-item-compact"><input type="checkbox" id="lb50"> ZDC</label><label class="exam-item-compact"><input type="checkbox" id="lb51"> Febre Amarela</label><label class="exam-item-compact"><input type="checkbox" id="lb52"> Potássio</label><label class="exam-item-compact"><input type="checkbox" id="lb53"> Painel Viral</label><label class="exam-item-compact"><input type="checkbox" id="lb54"> Teste Rápido COVID</label><label class="exam-item-compact"><input type="checkbox" id="lb55"> Teste Dengue</label><label class="exam-item-compact"><input type="checkbox" id="lb56"> Fósforo</label></div></div>
                             </div>
                         </div>
 
-                        <!-- Módulo: ENCAMINHAMENTO -->
                         <div id="tab-encaminhamento-left" class="tab-content">
                             <div class="body-content">
                                 <div class="field-group"><span class="label">Paciente:</span><input type="text" id="enc-nome" oninput="window.syncVal('enc-nome', 'enc-nome-c')"></div><br>
-                                <div class="encaminhamento-section">
-                                    <span class="encaminhamento-title">SOLICITO AVALIAÇÃO COM:</span>
-                                    <input type="text" id="enc-esp" oninput="window.syncVal('enc-esp','enc-esp-c')" placeholder="Ex: Cardiologista, Ortopedista...">
-                                </div>
-                                <div class="encaminhamento-section" style="flex-grow: 1;">
-                                    <span class="encaminhamento-title">RESUMO CLÍNICO / MOTIVO:</span>
-                                    <textarea id="enc-resumo" oninput="window.syncVal('enc-resumo','enc-resumo-c')" style="height: 200px; border: 1px solid #ddd; padding: 10px; background: #fafafa;"></textarea>
-                                </div>
+                                <div class="encaminhamento-section"><span class="encaminhamento-title">SOLICITO AVALIAÇÃO COM:</span><input type="text" id="enc-esp" oninput="window.syncVal('enc-esp','enc-esp-c')" placeholder="Ex: Cardiologista, Ortopedista..."></div>
+                                <div class="encaminhamento-section" style="flex-grow: 1;"><span class="encaminhamento-title">RESUMO CLÍNICO / MOTIVO:</span><textarea id="enc-resumo" oninput="window.syncVal('enc-resumo','enc-resumo-c')" style="height: 200px; border: 1px solid #ddd; padding: 10px; background: #fafafa;"></textarea></div>
                             </div>
                         </div>
 
-                        <!-- Rodapé Comum -->
                         <div class="field-group" id="main-footer-date" style="margin-top: auto; padding-top: 10px;">
                             <span class="label">DATA:</span><input type="text" id="data-input" style="width: 100px;" oninput="window.syncVal('data-input', 'data-copy')">
                             <span class="label" style="margin-left: 10px;">HORA:</span><input type="text" id="hora-input" style="width: 60px;" oninput="window.syncVal('hora-input', 'hora-copy')">
-                            <div style="flex-grow:1; text-align: center; margin-left: 20px;">
-                                <div style="border-top: 1px solid #000; padding-top: 2px; font-size: 10px; width: 80%; margin: 0 auto; color: #555;">Assinatura e Carimbo</div>
-                            </div>
+                            <div style="flex-grow:1; text-align: center; margin-left: 20px;"><div style="border-top: 1px solid #000; padding-top: 2px; font-size: 10px; width: 80%; margin: 0 auto; color: #555;">Assinatura e Carimbo</div></div>
                         </div>
-                        <div class="footer" id="main-footer-text">
-                            DSAU - SEÇÃO DE SAÚDE DO 5º BPM - BRASILEIA<br>Avenida Rui Lino, 599 Bairro: Centro, Brasileia - Acre
-                        </div>
+                        <div class="footer" id="main-footer-text">DSAU - SEÇÃO DE SAÚDE DO 5º BPM – BRASILEIA<br>Avenida Rui Lino, 599 – Bairro: Centro, Brasileia - Acre – CEP: 69.932-000</div>
                     </div>
 
                     <!-- LADO DIREITO (RAIO X / CÓPIA) -->
                     <div class="prescription-half readonly-side">
-                        <!-- Cabeçalho Cópia -->
                         <div class="header" id="copy-header">
                             <div class="header-content">
-                                <div class="logo-area">
-                                    <div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-star-of-life"></i></div>
-                                    <img src="brasao_pmac.png" class="logo-img" alt="PMAC" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'">
-                                </div>
-                                <div class="titles-area header-titles">
-                                    <h1>GOVERNO DO ESTADO DO ACRE</h1>
-                                    <h2>POLÍCIA MILITAR - DIRETORIA DE SAÚDE</h2>
-                                    <h2>SEÇÃO DE SAÚDE DE 5º BPM - BRASILEIA</h2>
-                                </div>
-                                <div class="logo-area">
-                                    <div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-hospital"></i></div>
-                                    <img src="brasao_acre.png" class="logo-img" alt="ACRE" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'">
-                                </div>
+                                <div class="logo-area"><div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-star-of-life"></i></div><img src="brasao_pmac.png" class="logo-img" alt="PMAC" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'"></div>
+                                <div class="titles-area header-titles"><h1>GOVERNO DO ESTADO DO ACRE</h1><h2>POLÍCIA MILITAR - DIRETORIA DE SAÚDE</h2><h2>SEÇÃO DE SAÚDE DE 5º BPM - BRASILEIA</h2></div>
+                                <div class="logo-area"><div class="logo-placeholder" style="display:none;"><i class="fa-solid fa-hospital"></i></div><img src="brasao_acre.png" class="logo-img" alt="ACRE" onerror="this.style.display='none'; this.previousElementSibling.style.display='flex'"></div>
                             </div>
                             <div class="doc-label" id="doc-label-right">RECEITUÁRIO (2ª VIA)</div>
                         </div>
 
-                        <!-- Conteúdo Receituário Cópia -->
+                        <!-- 1. RECEITUÁRIO COMUM (DIREITA - 2ª VIA - CORRIGIDO) -->
                         <div id="tab-receita-right" class="tab-content active">
                             <div class="body-content">
                                 <div class="field-group"><span class="label">Paciente:</span><input type="text" id="rec-nome-copy" readonly></div>
                                 <div class="field-group"><span class="label">Uso:</span><input type="text" id="rec-via-copy" value="USO ORAL" readonly style="font-weight: bold;"></div>
-                                
                                 <div class="medication-list" style="margin-top: 10px;">
                                     <div class="med-block"><div class="med-row-1"><span class="med-number">01.</span><input type="text" id="med1-c" readonly><input type="text" id="qtd1-c" readonly style="text-align:center;"></div><div class="med-row-2"><textarea rows="1" id="pos1-c" readonly></textarea><input type="text" id="hor1-c" readonly></div></div>
                                     <div class="med-block"><div class="med-row-1"><span class="med-number">02.</span><input type="text" id="med2-c" readonly><input type="text" id="qtd2-c" readonly style="text-align:center;"></div><div class="med-row-2"><textarea rows="1" id="pos2-c" readonly></textarea><input type="text" id="hor2-c" readonly></div></div>
@@ -1320,127 +964,127 @@
                             </div>
                         </div>
 
-                        <!-- Conteúdo CONTROLE ESPECIAL CÓPIA -->
+                        <!-- 2. CONTROLE ESPECIAL (DIREITA - 2ª VIA - PACIENTE) -->
                         <div id="tab-controle-right" class="tab-content">
                             <div class="special-control-container">
-                                <div class="sc-header">RECEITUÁRIO DE CONTROLE ESPECIAL</div>
-                                <div class="sc-sub-header">2ª Via - Paciente</div>
-                                
-                                <div class="sc-box">
-                                    <div class="sc-box-title">IDENTIFICAÇÃO DO EMITENTE</div>
-                                    <div class="sc-emitente-info">
-                                        <strong>POLÍCIA MILITAR DO ESTADO DO ACRE</strong><br>
-                                        FUNDO DE SAÚDE - POLICLÍNICA<br>
-                                        CNPJ: 23.380.324/0001-06<br>
-                                        Rua: Omar Sabino, nº 283 - Bairro Mascarenhas de Moraes - CEP: 69.918-000
-                                    </div>
-                                </div>
-
+                                <div class="sc-header">RECEITUÁRIO DE CONTROLE ESPECIAL</div><div class="sc-sub-header">2ª Via - Paciente</div>
+                                <div class="sc-box"><div class="sc-box-title">IDENTIFICAÇÃO DO EMITENTE</div><div class="sc-emitente-info"><strong>POLÍCIA MILITAR DO ESTADO DO ACRE</strong><br>DSAU - SEÇÃO DE SAÚDE DO 5º BPM – BRASILEIA<br>CNPJ: 23.380.324/0001-06<br>Avenida Rui Lino, 599 – Bairro: Centro, Brasileia - Acre – CEP: 69.932-000</div></div>
                                 <div style="margin-bottom: 5px;">
                                     <div class="sc-field-line"><span style="width: 60px;">Paciente:</span><input type="text" id="cnt-nome-c" readonly style="flex-grow: 1;"></div>
                                     <div class="sc-field-line"><span style="width: 60px;">Endereço:</span><input type="text" id="cnt-end-c" readonly style="flex-grow: 1;"></div>
                                     <div class="sc-field-line"><span style="width: 60px;">Prescrição:</span></div>
                                 </div>
-
-                                <div class="sc-prescription-area"><textarea id="cnt-presc-c" readonly></textarea></div>
-
-                                <div class="sc-footer-grid">
+                                <div class="sc-prescription-area">
+                                    <textarea id="cnt-presc-c" readonly></textarea>
+                                    
+                                    <!-- RODAPÉ DA PRESCRIÇÃO (CÓPIA) - AJUSTADO -->
+                                    <div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 5px 10px; border-top: 1px dashed rgba(0,0,0,0.2); background: rgba(255,255,255,0.5); margin-top: auto;">
+                                        <div style="display: flex; gap: 15px; margin-bottom: 5px;">
+                                            <div style="display: flex; align-items: center; gap: 5px;">
+                                                <span style="font-weight: bold; font-size: 10px;">DATA:</span>
+                                                <input type="text" id="cnt-data-c" readonly style="border:none; border-bottom: 1px solid #000; width: 80px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 5px;">
+                                                <span style="font-weight: bold; font-size: 10px;">HORA:</span>
+                                                <input type="text" id="cnt-hora-c" readonly style="border:none; border-bottom: 1px solid #000; width: 50px; text-align: center; background: transparent; font-family: 'Courier Prime', monospace; font-weight: bold; font-size: 11px;">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- ASSINATURA AJUSTADA (CÓPIA) -->
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                                            <div style="border-bottom: 1px solid #000; width: 200px; margin-bottom: 2px;"></div>
+                                            <span style="font-weight: bold; font-size: 8px; letter-spacing: 0.5px;">ASSINATURA DO MÉDICO</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sc-footer-grid" style="height: 140px;">
                                     <div class="sc-footer-box">
                                         <div class="sc-box-title">IDENTIFICAÇÃO DO COMPRADOR</div>
                                         <div class="sc-footer-content">
-                                            <div>Nome: <input type="text" class="sc-input-sm" readonly></div>
-                                            <div style="display:flex; gap:5px;"><span style="white-space:nowrap">Ident.Nº:</span><input type="text" class="sc-input-sm" style="width:70px" readonly><span style="white-space:nowrap">Órgão Exp:</span><input type="text" class="sc-input-sm" readonly></div>
-                                            <div>Endereço: <input type="text" class="sc-input-sm" readonly></div>
-                                            <div style="display:flex; gap:5px;"><span>Cidade:</span><input type="text" class="sc-input-sm" readonly><span>UF:</span><input type="text" class="sc-input-sm" style="width:30px" readonly></div>
-                                            <div>Telefone: <input type="text" class="sc-input-sm" readonly></div>
+                                            <div style="display:flex; align-items: flex-end; gap: 3px;"><span style="font-weight:bold;">Nome:</span> <input type="text" class="sc-input-sm" readonly></div>
+                                            <div style="display:flex; gap:5px; margin-top: 2px;"><span style="white-space:nowrap; font-weight:bold;">Ident.Nº:</span><input type="text" class="sc-input-sm" style="width:70px" readonly><span style="white-space:nowrap; font-weight:bold;">Órgão Exp:</span><input type="text" class="sc-input-sm" readonly></div>
+                                            <div style="display:flex; align-items: flex-end; gap: 3px; margin-top: 2px;"><span style="font-weight:bold;">Endereço:</span> <input type="text" class="sc-input-sm" readonly></div>
+                                            <div style="display:flex; gap:5px; margin-top: 2px;"><span style="font-weight:bold;">Cidade:</span><input type="text" class="sc-input-sm" readonly><span style="font-weight:bold;">UF:</span><input type="text" class="sc-input-sm" style="width:30px" readonly></div>
+                                            <div style="display:flex; align-items: flex-end; gap: 3px; margin-top: 2px;"><span style="font-weight:bold;">Telefone:</span> <input type="text" class="sc-input-sm" readonly></div>
                                         </div>
                                     </div>
                                     <div class="sc-footer-box">
                                         <div class="sc-box-title">IDENTIFICAÇÃO DO FORNECEDOR</div>
-                                        <div class="sc-footer-content" style="align-items: center; justify-content: flex-end; text-align: center;">
-                                            <div style="border-top: 1px solid #000; width: 80%; padding-top: 2px;">Assinatura do Farmacêutico</div>
-                                            <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 5px;">Data: ___/___/___</div>
+                                        <div class="sc-footer-content">
+                                            <div style="flex-grow: 1;"></div>
+                                            <div style="width: 100%; text-align: center; margin-bottom: 5px;"><div style="border-top: 1px solid #000; width: 90%; margin: 0 auto; padding-top: 2px; font-weight: bold;">Assinatura do Farmacêutico</div></div>
+                                            <div style="width: 100%; display: flex; justify-content: center; align-items: flex-end; gap: 5px; margin-bottom: 5px;"><span style="font-weight: bold;">Data:</span> <div style="width: 25px; border-bottom: 1px solid #000;"></div>/<div style="width: 25px; border-bottom: 1px solid #000;"></div>/<div style="width: 35px; border-bottom: 1px solid #000;"></div></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Conteúdo Atestado Cópia -->
-                        <div id="tab-atestado-right" class="tab-content"></div>
+                        <div id="tab-atestado-right" class="tab-content">
+                            <div class="atestado-body">Atesto para os devidos fins que o(a) Sr(a)<br><input type="text" id="atest-nome-c" readonly style="font-weight:bold; margin: 10px 0; font-size: 16px;"><br>foi atendido(a) nesta unidade de saúde nesta data, necessitando de<br><input type="text" id="atest-dias-c" readonly class="atestado-input" style="width: 60px; font-weight:bold; font-size: 16px;"> dias de afastamento<br>de suas atividades laborais.<br><br>CID: <input type="text" id="atest-cid-c" readonly style="width: 120px; font-weight: bold;"></div>
+                        </div>
 
-                        <!-- Conteúdo DECLARAÇÃO COMPARECIMENTO Cópia -->
-                        <div id="tab-comparecimento-right" class="tab-content"></div>
+                        <div id="tab-comparecimento-right" class="tab-content">
+                            <div class="atestado-body" style="font-size: 14px; line-height: 2.2;"><h3 style="text-align:center; text-decoration: underline; margin-bottom: 20px;">DECLARAÇÃO DE COMPARECIMENTO</h3>Declaro para os devidos fins que o(a) Sr(a)<br><input type="text" id="comp-nome-c" readonly style="font-weight:bold; margin: 5px 0; font-size: 16px; width: 100%;"><br>esteve presente nesta unidade de saúde no dia <input type="text" id="comp-data-c" readonly style="width: 120px; font-weight: bold; text-align: center;">,<br>no período das <input type="text" id="comp-hora-ini-c" readonly style="width: 70px; font-weight: bold; text-align: center;" placeholder="00:00"> às <input type="text" id="comp-hora-fim-c" readonly style="width: 70px; font-weight: bold; text-align: center;" placeholder="00:00"> horas,<br>para realização de: <input type="text" id="comp-motivo-c" readonly placeholder="Consulta Médica / Exames" style="width: 100%; margin-top: 5px;">.<br><br><div style="border: 1px dashed #ccc; padding: 10px; border-radius: 4px; margin-top: 10px;"><label style="font-weight: bold; display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; color: #555;"><input type="checkbox" id="comp-check-acompanhante-c" disabled style="border: 1px solid #ccc;"> ACOMPANHANTE (Marque se houver)</label><div id="area-acompanhante-c" style="display: none; margin-top: 10px; border-top: 1px solid #eee; padding-top: 5px;">Acompanhando o(a) paciente acima citado(a).<br>Nome do Acompanhante:<br><input type="text" id="comp-nome-acomp-c" readonly style="width: 100%; font-weight: bold;"></div></div></div>
+                        </div>
 
-                        <!-- Conteúdo RAIO X -->
                         <div id="tab-exames-right" class="tab-content">
                             <div class="body-content" style="display:flex; flex-direction:column; height:100%;">
-                                <div class="field-group">
-                                    <span class="label">Paciente:</span><input type="text" id="exam-nome-c" readonly>
-                                </div>
-                                <div class="field-group">
-                                    <span class="label">Idade:</span><input type="text" id="exam-idade-c" readonly style="width: 50px;">
-                                </div>
-
+                                <div class="field-group"><span class="label">Paciente:</span><input type="text" id="exam-nome-c" readonly></div>
+                                <div class="field-group"><span class="label">Idade:</span><input type="text" id="exam-idade-c" readonly style="width: 50px;"></div>
                                 <div class="exams-layout">
                                     <div class="exam-header">SOLICITAÇÃO DE RAIO X</div>
-                                    <div class="sub-header">Unidade: Hospital Regional do Alto Acre</div>
                                     <div class="compact-grid two-cols" style="flex-grow: 0;">
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx1-c" disabled> RAIO X ANTEBRAÇO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx2-c" disabled> RAIO X ABDOME</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx3-c" disabled> RAIO X DE ATM</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx4-c" disabled> RAIO X CLAVICULA</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx5-c" disabled> RAIO X CALCANEO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx6-c" disabled> RAIO X COTOVELO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx7-c" disabled> RAIO X CRANEO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx8-c" disabled> RAIO X FEMUR</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx9-c" disabled> RAIO X JOELHO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx10-c" disabled> RAIO X MÃO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx11-c" disabled> RAIO X OMBRO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx12-c" disabled> RAIO X PÉ</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx13-c" disabled> RAIO X PERNA</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx14-c" disabled> RAIO X PUNHO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx15-c" disabled> RAIO X QUADRIL</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx16-c" disabled> RAIO X TORAX</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx17-c" disabled> RAIO X TORNOZELO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx18-c" disabled> RAIO X UMERO</label>
-                                        <label class="exam-item-compact"><input type="checkbox" id="rx19-c" disabled> OUTROS:</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx1" class="x-check"> RAIO X ANTEBRAÇO (AP + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx2" class="x-check"> RAIO X ABDOME (AP + ORTO)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx3" class="x-check"> RAIO X DE ATM (AP + LAT)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx4" class="x-check"> RAIO X CLAVICULA (AP)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx5" class="x-check"> RAIO X CALCANEO (LAT + AXIAL)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx6" class="x-check"> RAIO X COTOVELO (AP + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx7" class="x-check"> RAIO X CRANEO (AP + LAT)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx8" class="x-check"> RAIO X FEMUR (AP + LAT)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx9" class="x-check"> RAIO X JOELHO (AP + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx10" class="x-check"> RAIO X MÃO (PA + OBL)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx11" class="x-check"> RAIO X OMBRO (AP + ROT)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx12" class="x-check"> RAIO X PÉ (AP + OBL)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx13" class="x-check"> RAIO X PERNA (AP + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx14" class="x-check"> RAIO X PUNHO (PA + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx15" class="x-check"> RAIO X QUADRIL (AP + LAT)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx16" class="x-check"> RAIO X TORAX (PA + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx17" class="x-check"> RAIO X TORNOZELO (AP + P)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx18" class="x-check"> RAIO X UMERO (AP + LAT)</label>
+                                        <label class="exam-item-compact"><input type="checkbox" id="rx19" class="x-check"> OUTROS:</label>
                                     </div>
-                                    <div class="side-check">
-                                        <label><input type="checkbox" id="rx-esq-c" disabled> ESQUERDO</label>
-                                        <label><input type="checkbox" id="rx-dir-c" disabled> DIREITO</label>
-                                    </div>
+                                    <div class="side-check"><label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" id="rx-esq" class="x-check"> ESQUERDO</label><label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" id="rx-dir" class="x-check"> DIREITO</label></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Conteúdo Encaminhamento Cópia -->
-                        <div id="tab-encaminhamento-right" class="tab-content"></div>
+                        <div id="tab-encaminhamento-right" class="tab-content">
+                            <div class="body-content">
+                                <div class="field-group"><span class="label">Paciente:</span><input type="text" id="enc-nome-c" readonly></div><br>
+                                <div class="encaminhamento-section"><span class="encaminhamento-title">SOLICITO AVALIAÇÃO COM:</span><input type="text" id="enc-esp-c" readonly placeholder="Ex: Cardiologista, Ortopedista..."></div>
+                                <div class="encaminhamento-section" style="flex-grow: 1;"><span class="encaminhamento-title">RESUMO CLÍNICO / MOTIVO:</span><textarea id="enc-resumo-c" readonly style="height: 200px; border: 1px solid #ddd; padding: 10px; background: #fafafa;"></textarea></div>
+                            </div>
+                        </div>
 
-                        <!-- Rodapé Cópia -->
                         <div class="field-group" id="copy-footer-date" style="margin-top: auto; padding-top: 10px;">
                             <span class="label">DATA:</span><input type="text" id="data-copy" style="width: 100px;" readonly>
                             <span class="label" style="margin-left: 10px;">HORA:</span><input type="text" id="hora-copy" style="width: 60px;" readonly>
-                            <div style="flex-grow:1; text-align: center; margin-left: 20px;">
-                                <div style="border-top: 1px solid #000; padding-top: 2px; font-size: 10px; width: 80%; margin: 0 auto; color: #555;">Assinatura e Carimbo</div>
-                            </div>
+                            <div style="flex-grow:1; text-align: center; margin-left: 20px;"><div style="border-top: 1px solid #000; padding-top: 2px; font-size: 10px; width: 80%; margin: 0 auto; color: #555;">Assinatura e Carimbo</div></div>
                         </div>
-                        <div class="footer" id="copy-footer-text">
-                            DSAU - SEÇÃO DE SAÚDE DO 5º BPM - BRASILEIA<br>Avenida Rui Lino, 599 Bairro: Centro, Brasileia - Acre
-                        </div>
+                        <div class="footer" id="copy-footer-text">DSAU - SEÇÃO DE SAÚDE DO 5º BPM – BRASILEIA<br>Avenida Rui Lino, 599 – Bairro: Centro, Brasileia - Acre – CEP: 69.932-000</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE INTEGRATION & APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Configuration setup
         let firebaseConfig;
         if (typeof __firebase_config !== 'undefined') {
             firebaseConfig = JSON.parse(__firebase_config);
@@ -1463,15 +1107,11 @@
         let currentUser = null;
         let isDevMaster = false;
 
-        // Path functions
         function getModelosCollection() {
             return collection(db, 'artifacts', appId, 'users', currentUser.uid, 'modelos_receita');
         }
         function getModeloDoc(name) {
             return doc(db, 'artifacts', appId, 'users', currentUser.uid, 'modelos_receita', name);
-        }
-        function getUsersCollectionPath() {
-            return collection(db, 'artifacts', appId, 'public', 'data', 'medsync_users');
         }
 
         let savedTemplates = {};
@@ -1507,44 +1147,36 @@
                 <p>${fraseEscolhida}</p>
             `;
             document.body.appendChild(banner);
-
-            // Remove após 10 segundos
             setTimeout(() => {
-                banner.style.animation = 'welcomeFadeOut 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards';
+                banner.style.animation = 'welcomeFadeOut 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
                 setTimeout(() => banner.remove(), 800);
             }, 10000);
         };
 
-        // --- SISTEMA DE LOGIN PERFEITO ---
         window.doLogin = async function() {
             const user = document.getElementById('login-user').value.trim();
             const pass = document.getElementById('login-pass').value.trim();
+            
+            document.getElementById('admin-modal').style.display = 'none';
 
-            if (!user || !pass) {
-                window.showToast("Preencha usuário e senha.", "error");
-                return;
-            }
+            if (!user || !pass) { window.showToast("Preencha usuário e senha.", "error"); return; }
 
             const loginScreen = document.getElementById('login-screen');
             const appWrapper = document.getElementById('app-wrapper');
             const btnAdmin = document.getElementById('btn-admin-panel');
 
-            // 1. MASTER DEV ACCESS
             if (user === 'DEV' && pass === '1408') {
                 isDevMaster = true;
-                btnAdmin.style.display = 'flex'; // Mostra botão de gestão
+                btnAdmin.style.display = 'flex'; 
                 transitionToApp();
                 setTimeout(() => window.showWelcomeBanner('Mestre'), 600);
                 await loadTemplatesFromCloud();
                 return;
             }
 
-            // 2. OTHER USERS ACCESS
             try {
-                // Checa no banco de dados público de usuários
                 const usersDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'medsync_users', 'auth_data');
                 const usersSnap = await getDoc(usersDocRef);
-                
                 if (usersSnap.exists()) {
                     const dbUsers = usersSnap.data().users || {};
                     if (dbUsers[user] && dbUsers[user] === pass) {
@@ -1554,7 +1186,6 @@
                         return;
                     }
                 }
-                
                 window.showToast("Usuário ou senha incorretos.", "error");
             } catch (e) {
                 console.error(e);
@@ -1573,31 +1204,24 @@
             }, 600);
         }
 
-        // --- SISTEMA DE LOGOUT ---
         window.doLogout = function() {
             const appWrapper = document.getElementById('app-wrapper');
-            appWrapper.style.opacity = '0'; // Esconde a tela suavemente
+            appWrapper.style.opacity = '0';
             window.showToast("Encerrando sessão...", "info");
-            
-            // Recarrega a página após a animação para limpar todos os dados médicos digitados por segurança
-            setTimeout(() => {
-                window.location.reload();
-            }, 800);
+            setTimeout(() => { window.location.reload(); }, 800);
         };
 
-        // --- PAINEL DE ADMINISTRAÇÃO DEV ---
-        window.openAdmin = function() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            loadUsersList();
+        window.openAdmin = function() { 
+            const modal = document.getElementById('admin-modal');
+            modal.style.display = 'flex'; 
+            loadUsersList(); 
         };
-
-        window.closeAdmin = function() {
-            document.getElementById('admin-modal').style.display = 'none';
-        };
+        
+        window.closeAdmin = function() { document.getElementById('admin-modal').style.display = 'none'; };
 
         async function loadUsersList() {
             const listDiv = document.getElementById('admin-users-list');
-            listDiv.innerHTML = '<div style="text-align:center; padding:10px;"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+            listDiv.innerHTML = '<div style="text-align:center; padding:40px; color:rgba(255,255,255,0.5);"><i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i><br>Carregando dados...</div>';
             
             try {
                 const usersDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'medsync_users', 'auth_data');
@@ -1606,20 +1230,30 @@
                 if (usersSnap.exists()) users = usersSnap.data().users || {};
                 
                 listDiv.innerHTML = '';
-                if(Object.keys(users).length === 0) {
-                    listDiv.innerHTML = '<div style="text-align:center; font-size:12px; padding:5px; color:#94a3b8;">Nenhum usuário cadastrado.</div>';
+                if(Object.keys(users).length === 0) { 
+                    listDiv.innerHTML = '<div style="text-align:center; font-size:13px; padding:30px; color:#94a3b8; border: 1px dashed rgba(255,255,255,0.1); border-radius: 10px;">Nenhum usuário cadastrado.</div>'; 
                 }
 
                 for (const [uName, uPass] of Object.entries(users)) {
                     listDiv.innerHTML += `
-                        <div class="admin-list-item">
-                            <span><i class="fa-solid fa-user-doctor"></i> ${uName}</span>
-                            <button onclick="window.deleteUser('${uName}')"><i class="fa-solid fa-trash"></i></button>
+                        <div class="user-card">
+                            <div class="user-info-group">
+                                <div class="user-avatar">
+                                    <i class="fa-solid fa-user-doctor"></i>
+                                </div>
+                                <div class="user-details">
+                                    <span class="user-name-text">${uName}</span>
+                                    <span class="user-role-badge">Acesso Autorizado</span>
+                                </div>
+                            </div>
+                            <button class="delete-user-btn" onclick="window.deleteUser('${uName}')" title="Remover usuário">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                     `;
                 }
-            } catch (e) {
-                listDiv.innerHTML = '<div style="color:#ef4444; font-size:12px; text-align:center;">Erro ao carregar.</div>';
+            } catch (e) { 
+                listDiv.innerHTML = '<div style="color:#ef4444; font-size:12px; text-align:center; padding: 20px;">Erro de conexão.</div>'; 
             }
         }
 
@@ -1627,24 +1261,17 @@
             const uName = document.getElementById('new-user-name').value.trim();
             const uPass = document.getElementById('new-user-pass').value.trim();
             if(!uName || !uPass) { window.showToast("Preencha todos os campos.", "error"); return; }
-
             const usersDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'medsync_users', 'auth_data');
             try {
                 const usersSnap = await getDoc(usersDocRef);
                 let users = usersSnap.exists() ? (usersSnap.data().users || {}) : {};
-                
                 if(users[uName]) { window.showToast("Usuário já existe!", "error"); return; }
-                
                 users[uName] = uPass;
                 await setDoc(usersDocRef, { users: users }, { merge: true });
                 window.showToast("Usuário criado com sucesso!");
-                document.getElementById('new-user-name').value = '';
-                document.getElementById('new-user-pass').value = '';
+                document.getElementById('new-user-name').value = ''; document.getElementById('new-user-pass').value = '';
                 loadUsersList();
-            } catch(e) {
-                console.error(e);
-                window.showToast("Erro ao criar usuário.", "error");
-            }
+            } catch(e) { window.showToast("Erro ao criar usuário.", "error"); }
         };
 
         window.deleteUser = async function(uName) {
@@ -1657,13 +1284,9 @@
                 await setDoc(usersDocRef, { users: users });
                 window.showToast("Usuário removido!");
                 loadUsersList();
-            } catch(e) {
-                console.error(e);
-                window.showToast("Erro ao remover usuário.", "error");
-            }
+            } catch(e) { window.showToast("Erro ao remover usuário.", "error"); }
         };
 
-        // --- SISTEMA BASE ---
         window.calcularPediatria = function() {
             const peso = parseFloat(document.getElementById('calc-peso').value);
             const med = document.getElementById('calc-med').value;
@@ -1685,18 +1308,41 @@
             else if (med === 'pred') { let doseMl = (peso / 3).toFixed(1); msg = `Prednisolona (3mg/mL):<br><strong>${doseMl} mL</strong> 1x ao dia.<br>(Manhã - 3 a 5 dias)`; }
             else if (med === 'dex') { let doseMl = (peso / 8).toFixed(1); msg = `Dexclorfeniramina (0.4mg/mL):<br><strong>${doseMl} mL</strong> a cada 8 horas.<br>(Se alergia)`; }
 
-            resultDiv.style.display = 'block'; resultDiv.style.background = 'rgba(212, 175, 55, 0.1)'; resultDiv.style.border = '1px solid var(--accent-gold)'; resultDiv.style.color = 'var(--accent-gold)';
+            resultDiv.style.display = 'block'; resultDiv.style.background = 'linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(217, 119, 6, 0.1) 100%)'; resultDiv.style.border = '1px solid rgba(251, 191, 36, 0.3)'; resultDiv.style.color = '#fbbf24';
             resultDiv.innerHTML = msg;
         };
 
-        window.syncVal = function(src, target) { document.getElementById(target).value = document.getElementById(src).value; };
+        window.syncVal = function(src, target) { 
+            const sourceEl = document.getElementById(src);
+            const targetEl = document.getElementById(target);
+            if(sourceEl && targetEl) {
+                targetEl.value = sourceEl.value; 
+            }
+        };
+        
         window.syncCheck = function(src, target) { document.getElementById(target).checked = document.getElementById(src).checked; };
 
         window.toggleAcompanhante = function() {
             const check = document.getElementById('comp-check-acompanhante');
             const area = document.getElementById('area-acompanhante');
-            if(check.checked) { area.style.display = 'block'; } 
-            else { area.style.display = 'none'; document.getElementById('comp-nome-acomp').value = ''; }
+            const checkC = document.getElementById('comp-check-acompanhante-c');
+            const areaC = document.getElementById('area-acompanhante-c');
+            
+            if(check && area) {
+                if(check.checked) { 
+                    area.style.display = 'block'; 
+                    if(areaC) areaC.style.display = 'block';
+                    if(checkC) checkC.checked = true;
+                } else { 
+                    area.style.display = 'none'; 
+                    document.getElementById('comp-nome-acomp').value = '';
+                    if(areaC) {
+                        areaC.style.display = 'none'; 
+                        document.getElementById('comp-nome-acomp-c').value = '';
+                    }
+                    if(checkC) checkC.checked = false;
+                }
+            }
         };
 
         window.switchTab = function(mode) {
@@ -1841,7 +1487,14 @@
             document.getElementById('data-input').value = dateStr; document.getElementById('data-copy').value = dateStr;
             document.getElementById('hora-input').value = timeStr; document.getElementById('hora-copy').value = timeStr;
             document.getElementById('comp-data').value = dateStr;
+            if(document.getElementById('comp-data-c')) document.getElementById('comp-data-c').value = dateStr;
             
+            // Popula também a data/hora do Controle Especial
+            if(document.getElementById('cnt-data')) document.getElementById('cnt-data').value = dateStr;
+            if(document.getElementById('cnt-hora')) document.getElementById('cnt-hora').value = timeStr;
+            if(document.getElementById('cnt-data-c')) document.getElementById('cnt-data-c').value = dateStr;
+            if(document.getElementById('cnt-hora-c')) document.getElementById('cnt-hora-c').value = timeStr;
+
             window.switchTab('receita');
 
             // 1. Autenticação imediata (Anônima) para permitir leitura de dados no Firebase
@@ -1872,7 +1525,7 @@
             const statusEl = document.getElementById('db-status');
             
             selectEl.innerHTML = '<option value="">Carregando da nuvem...</option>';
-            if(statusEl) statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color: var(--accent-color)"></i> Conectando...';
+            if(statusEl) statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color: var(--accent-cyan)"></i> Conectando...';
 
             try {
                 const querySnapshot = await getDocs(getModelosCollection());
